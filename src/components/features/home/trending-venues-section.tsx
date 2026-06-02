@@ -143,7 +143,7 @@ export function TrendingVenuesSection() {
             {venues.map((venue, index) => (
               <motion.article
                 key={venue.id}
-                variants={venueCardVariants}
+                variants={venueCardVariants as any}
                 className="group relative flex h-[500px] w-[86vw] shrink-0 flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:w-[60vw] md:h-[480px] md:w-auto"
               >
                 {/* Image Container */}

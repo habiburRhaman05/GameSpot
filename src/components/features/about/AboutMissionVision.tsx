@@ -87,7 +87,7 @@ export function AboutMissionVision() {
             </div>
 
             <p className="text-base text-primary-foreground/80 leading-relaxed">
-              Court Connect is building the world's most trusted marketplace for
+              GameSpot is building the world's most trusted marketplace for
               sports venues. We envision a future where finding, booking, and
               playing at premium facilities is as simple as ordering food.
             </p>

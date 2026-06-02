@@ -20,7 +20,7 @@ export function AboutHero() {
         </h1>
 
         <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Court Connect is revolutionizing how athletes and teams discover,
+          GameSpot is revolutionizing how athletes and teams discover,
           book, and play at premium sports venues worldwide. From casual players
           to professional organizers, we connect you with the perfect venue.
         </p>

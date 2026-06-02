@@ -1,10 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 import {
-  AboutEcosystem,
   AboutHero,
   AboutMissionVision,
   AboutPartners,
-  AboutTeam,
   AboutWhyChoose,
 } from "@/components/features/about";
 
@@ -15,8 +13,6 @@ const AboutPage = () => {
       <AboutMissionVision />
       <AboutWhyChoose />
 
-      <AboutEcosystem />
-      <AboutTeam />
       <AboutPartners />
     </main>
   );

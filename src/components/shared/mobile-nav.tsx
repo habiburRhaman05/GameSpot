@@ -123,7 +123,7 @@ export function MobileNav({
             Navigation
           </SheetTitle>
           <p className="text-xs text-text-secondary">
-            Discover venues and manage your Court Connect profile.
+            Discover venues and manage your GameSpot profile.
           </p>
         </SheetHeader>
 
@@ -152,7 +152,7 @@ export function MobileNav({
               <motion.div
                 key={link.href}
                 custom={i}
-                variants={staggerVariants}
+                variants={staggerVariants as any}
                 initial="hidden"
                 animate="visible"
               >

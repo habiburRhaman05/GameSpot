@@ -118,7 +118,7 @@ export const TESTIMONIALS_1 = [
     authorName: "James Wilson",
     authorTagline: "Weekend Tennis Player",
     quote:
-      "Court Connect made weekend match planning effortless. My group now books one week ahead without any friction.",
+      "GameSpot made weekend match planning effortless. My group now books one week ahead without any friction.",
   },
   {
     authorAvatar:
@@ -177,7 +177,7 @@ export const TESTIMONIALS_2 = [
     authorName: "Chris Johnson",
     authorTagline: "Table Tennis Player",
     quote:
-      "I added Court Connect to our club workflow. Booking disputes dropped because all confirmations are clear and centralized.",
+      "I added GameSpot to our club workflow. Booking disputes dropped because all confirmations are clear and centralized.",
   },
 ];
 

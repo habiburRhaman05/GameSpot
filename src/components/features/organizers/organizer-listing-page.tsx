@@ -139,7 +139,7 @@ export default function OrganizerListingPage() {
             The Partners
           </h1>
           <p className="max-w-2xl text-sm text-primary-foreground/80">
-            New to Court Connect? Explore verified organizations, compare their
+            New to GameSpot? Explore verified organizations, compare their
             venue footprint, and jump into their portfolio instantly.
           </p>
         </div>

@@ -110,7 +110,7 @@ export function ChatAssistant() {
                 </ReactMarkdown>
               </div>
 
-              {m.parts?.filter((p) => p.type === "tool-invocation" && p.toolInvocation.toolName === "searchCourts").map((p) => {
+              {/* {m.parts?.filter((p) => p.type === "tool-invocation" && p.toolCallId.toolName === "searchCourts").map((p) => {
                 const ti = (p as any).toolInvocation;
                 const payload = ti?.state === "result" ? ti?.result as SearchResult : null;
                 const isResolved = ti?.state === "result";
@@ -140,7 +140,7 @@ export function ChatAssistant() {
                     )}
                   </div>
                 );
-              })}
+              })} */}
             </div>
           </div>
         ))}

@@ -34,7 +34,7 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
               href="/"
               className="inline-flex items-center gap-2 font-display text-xl font-black tracking-tight text-white md:text-2xl lg:text-3xl"
             >
-              <span className="text-accent">COURT</span> CONNECT
+              <span className="text-accent">GAME</span> SPOT
             </Link>
           </div>
 
@@ -86,14 +86,14 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
               href="/"
               className="inline-flex items-center gap-2 font-display text-xl font-black tracking-tight text-foreground"
             >
-              <span className="text-primary">COURT</span> CONNECT
+              <span className="text-primary">GAME</span> SPOT
             </Link>
           </div>
 
           <div className="flex-1">{children}</div>
 
           <div className="mx-auto mt-12 flex w-full items-center justify-between pt-8 text-[10px] font-bold uppercase tracking-widest text-text-secondary sm:text-xs">
-            <div>© 2026 COURT CONNECT</div>
+            <div>© 2026 GAME SPOT</div>
             <div className="flex gap-4">
               <a href="#" className="transition-colors hover:text-primary">
                 Privacy

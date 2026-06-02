@@ -132,7 +132,7 @@ export default function OrganizerProfilePage() {
 
                 <p className="max-w-3xl text-sm text-primary-foreground/85 sm:text-base">
                   {organizer.bio?.trim() ||
-                    "Premium sports venue partner on Court Connect."}
+                    "Premium sports venue partner on GameSpot."}
                 </p>
               </div>
             </div>
@@ -288,7 +288,7 @@ export default function OrganizerProfilePage() {
         <div className="grid grid-cols-1 items-stretch lg:grid-cols-2">
           <div className="space-y-6 p-6 sm:p-8 lg:p-10">
             <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
-              Partner With Court Connect
+              Partner With GameSpot
             </p>
             <h3 className="font-heading text-4xl font-black uppercase leading-[0.9] tracking-tight sm:text-5xl lg:text-6xl">
               Elevate Your Game
@@ -319,7 +319,7 @@ export default function OrganizerProfilePage() {
           <div className="relative min-h-72">
             <Image
               src={"/image3.png"}
-              alt="Become an organizer on Court Connect"
+              alt="Become an organizer on GameSpot"
               fill
               loading="eager"
               className="object-cover"

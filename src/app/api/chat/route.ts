@@ -159,7 +159,7 @@ export async function POST(req: Request) {
       maxRetries: 0,
       maxOutputTokens: maxOutputTokensByIntent[intent],
 
-      system: `You are CourtConnect's smart AI assistant named "CourtBot".
+      system: `You are GameSpot's smart AI assistant named "CourtBot".
 You help users find sports facilities and courts.
 
 Rules:
@@ -266,7 +266,7 @@ ${intentHint}`,
         }),
         helpQA: tool({
           description:
-            "Provides built-in CourtConnect help answers for user Q/A commands and common guidance.",
+            "Provides built-in GameSpot help answers for user Q/A commands and common guidance.",
           inputSchema: z.object({
             topic: z
               .enum(["commands", "booking", "payment", "organizer", "support"])

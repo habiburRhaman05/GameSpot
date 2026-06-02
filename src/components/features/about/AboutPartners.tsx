@@ -54,7 +54,7 @@ export function AboutPartners() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              href="mailto:partners@courtconnect.com"
+              href="mailto:partners@gamespot.com"
               className="inline-flex w-1/3 mx-auto items-center justify-center bg-secondary text-secondary-foreground px-6 py-3 font-bold uppercase text-xs tracking-[0.12em] hover:bg-secondary/90 transition-colors"
             >
               Get in Touch

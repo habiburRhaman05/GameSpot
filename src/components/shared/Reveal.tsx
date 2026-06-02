@@ -63,7 +63,7 @@ export function Reveal({
       whileInView="visible"
       viewport={{ once, margin }}
       variants={variantMap[variant]}
-      transition={{ duration, delay: delay || undefined, ease }}
+      transition={{ duration, delay: delay || undefined }}
       className={className}
     >
       {children}

@@ -86,7 +86,7 @@ export default function VenuePortfolioPage({ role }: { role: "ORGANIZER" | "ADMI
                   <div className="h-full w-full bg-gradient-to-br from-surface-2 to-border" />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                <div className="absolute right-3 top-3"><Badge variant={statusBadge(venue.status)}>{venue.status.replaceAll("_", " ")}</Badge></div>
+                <div className="absolute right-3 top-3"><Badge variant={statusBadge(venue.status)as any}>{venue.status.replaceAll("_", " ")}</Badge></div>
               </div>
               <CardContent className="space-y-4 p-4">
                 <div className="flex items-start justify-between gap-2">

@@ -210,7 +210,7 @@ export default function AdminReportsPage() {
                   <p className="text-xs text-foreground">{alert.label}</p>
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-semibold text-foreground">{alert.value}</span>
-                    <Badge variant={severityToVariant(alert.severity)}>{alert.severity}</Badge>
+                    <Badge variant={severityToVariant(alert.severity) as any}>{alert.severity}</Badge>
                   </div>
                 </div>
               ))}

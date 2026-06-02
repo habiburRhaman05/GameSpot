@@ -57,7 +57,7 @@ export function HowItWorksSection() {
             return (
               <motion.article
                 key={step.id}
-                variants={cardVariants}
+                variants={cardVariants as any}
                 className="group relative flex h-full flex-col overflow-hidden rounded-xl glass p-6 sm:p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
               >
                 {/* Large background number */}
@@ -80,7 +80,7 @@ export function HowItWorksSection() {
 
                 <div className="mt-auto pt-6">
                   <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-primary">
-                    Court Connect Flow
+                    GameSpot Flow
                     <span className="h-px w-8 bg-primary/30" />
                   </span>
                 </div>

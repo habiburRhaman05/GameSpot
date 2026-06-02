@@ -42,7 +42,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Court Connect",
+  title: "GameSpot",
   description:
     "Your destination for seamless court bookings and exclusive athletic experiences.",
   icons: {

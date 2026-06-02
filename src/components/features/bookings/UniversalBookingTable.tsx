@@ -100,7 +100,7 @@ export function UniversalBookingTable({ role, bookings, loading, onView, onPay, 
     { id: "date", header: "Date & Time", cell: ({ row }) => { const b = row.original; return (
       <div><p className="text-sm font-medium text-foreground">{format(new Date(b.bookingDate), "MMM dd, yyyy")}</p><p className="text-xs text-text-tertiary">{getTimeRange(b)}</p></div>
     );}},
-    { id: "payment", header: "Payment", cell: ({ row }) => <Badge variant={statusBadge(row.original.status)}>{row.original.status}</Badge> },
+    { id: "payment", header: "Payment", cell: ({ row }) => <Badge variant={statusBadge(row.original.status) as any}>{row.original.status}</Badge> },
     { id: "actions", header: "Actions", cell: ({ row }) => { const b = row.original; const isPending = b.status === "PENDING"; return (
       <div className="flex flex-wrap gap-2">
         {onView && <Button size="sm" variant="outline" onClick={() => onView(b)}><Eye className="mr-1 h-3.5 w-3.5" />View</Button>}
