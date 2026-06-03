@@ -1,8 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
 import Link from "next/link";
-import { gsap } from "gsap";
 import { cn } from "@/lib/utils";
 
 type LogoProps = {
@@ -16,65 +14,56 @@ export function Logo({
   className,
   hideTagline = false,
 }: LogoProps) {
-  const iconRef = useRef<HTMLSpanElement>(null);
-  const glowRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    if (!iconRef.current || !glowRef.current) return;
-
-    const ctx = gsap.context(() => {
-      gsap.to(iconRef.current, {
-        boxShadow:
-          "0 0 16px rgba(124,106,239,0.35), 0 0 32px rgba(124,106,239,0.1)",
-        duration: 2.5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
-      gsap.to(glowRef.current, {
-        rotation: 360,
-        duration: 10,
-        repeat: -1,
-        ease: "none",
-      });
-    });
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <Link
       href="/"
+      aria-label="GameSpot — home"
       className={cn(
-        "group relative inline-flex items-center gap-2.5 whitespace-nowrap transition-all duration-200",
+        "group/logo relative inline-flex items-center gap-2.5 whitespace-nowrap outline-none",
         className,
       )}
     >
-      {/* Animated glow background */}
+      {/* Soft athletic glow on hover */}
       <span
-        ref={glowRef}
-        className="absolute -inset-3 rounded-full bg-gradient-to-r from-primary/15 via-accent/8 to-primary/15 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100"
+        aria-hidden
+        className="pointer-events-none absolute -inset-2.5 rounded-full bg-gradient-to-r from-primary/0 via-primary/30 to-accent/20 opacity-0 blur-2xl transition-opacity duration-500 group-hover/logo:opacity-100"
       />
 
-      {/* Icon mark — smaller, refined */}
+      {/* Icon mark — refined, athletic */}
       <span
-        ref={iconRef}
-        className="relative flex h-7 w-7 items-center justify-center rounded-md bg-primary shadow-sm sm:h-8 sm:w-8"
+        className={cn(
+          "relative inline-flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-lg",
+          "bg-[linear-gradient(135deg,var(--primary)_0%,color-mix(in_oklab,var(--primary)_70%,var(--accent))_100%)]",
+          "shadow-[0_4px_14px_-4px_rgba(0,102,255,0.45),inset_0_1px_0_0_rgba(255,255,255,0.18)]",
+          "transition-transform duration-300 group-hover/logo:scale-[1.04]",
+        )}
       >
-        <span className="text-[9px] font-black text-white sm:text-[10px]">
+        {/* Highlight line */}
+        <span
+          aria-hidden
+          className="absolute inset-x-1 top-0 h-px bg-white/50 mix-blend-overlay"
+        />
+        {/* Glyph */}
+        <span className="relative font-display text-[14px] font-black leading-none text-white drop-shadow-sm">
           G
         </span>
-        <span className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50" />
+        {/* Live dot */}
+        <span
+          aria-hidden
+          className="absolute right-1 top-1 inline-flex h-1.5 w-1.5 items-center justify-center"
+        >
+          <span className="absolute inline-flex h-full w-full animate-pulse-soft rounded-full bg-accent/60" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_6px_var(--accent)]" />
+        </span>
       </span>
 
-      {/* Text */}
-      <span className="relative flex flex-col">
+      {/* Wordmark */}
+      <span className="relative flex flex-col leading-none">
         <span
           className={cn(
-            "font-display text-sm font-black uppercase tracking-tight leading-none sm:text-base",
+            "font-display text-[15px] font-black uppercase leading-none tracking-tight sm:text-base",
             variant === "default" && "text-foreground",
-            variant === "gradient" && "text-gradient-primary",
+            variant === "gradient" && "text-gradient-aurora",
             variant === "minimal" && "text-foreground/80",
           )}
         >
@@ -82,7 +71,7 @@ export function Logo({
           <span>Spot</span>
         </span>
         {!hideTagline && (
-          <span className="text-[7px] font-bold uppercase tracking-[0.22em] text-text-tertiary sm:text-[8px]">
+          <span className="mt-1 text-[7.5px] font-bold uppercase tracking-[0.24em] text-text-tertiary sm:text-[8px]">
             Elite Sports Network
           </span>
         )}

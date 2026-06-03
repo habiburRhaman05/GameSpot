@@ -9,7 +9,7 @@ function Card({
   ...props
 }: React.ComponentProps<"div"> & {
   size?: "default" | "sm"
-  variant?: "default" | "glass"
+  variant?: "default" | "glass" | "accent"
 }) {
   return (
     <div
@@ -19,6 +19,7 @@ function Card({
       className={cn(
         "group/card flex flex-col gap-4 overflow-hidden rounded-xl bg-card border border-border py-4 text-sm text-card-foreground transition-all duration-200 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 hover:-translate-y-0.5 hover:shadow-lg hover:border-border-strong *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg",
         variant === "glass" && "glass",
+        variant === "accent" && "border-l-4 border-l-primary",
         className
       )}
       {...props}
@@ -43,7 +44,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-title"
-      className={cn("font-heading text-sm font-medium", className)}
+      className={cn("font-display text-sm font-bold", className)}
       {...props}
     />
   )

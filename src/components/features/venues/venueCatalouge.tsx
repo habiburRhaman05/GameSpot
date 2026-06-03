@@ -244,10 +244,7 @@ export function VenueCatalog({
 
   // CHECK IF ANY FILTER IS ACTIVE TO SHOW CLEAR BUTTON IN UI
   const hasActiveFilters =
-    filters.selectedTypes.length > 0 ||
-    filters.selectedAmenityIds.length > 0 ||
-    filters.maxPrice < MAX_PRICE_CAP ||
-    Boolean(searchParams.get("searchTerm"));
+    filters.selectedTypes.length > 0 || filters.selectedAmenityIds.length > 0 || filters.maxPrice < MAX_PRICE_CAP || Boolean(searchParams.get("searchTerm"));
 
   const setPage = (nextPage: number) => {
     dispatch({ type: "SET_PAGE", payload: nextPage });
@@ -257,23 +254,27 @@ export function VenueCatalog({
   };
 
   return (
-    <section className="mx-auto mb-10 w-full max-w-350 mt-10 lg:mt-10 px-4 pb-16 pt-24 sm:px-6 lg:px-8">
+    <section className="mx-auto mb-10 w-full max-w-350 px-4 pb-16 pt-24 sm:px-6 lg:px-8 lg:pt-10">
+      {/* Page Header */}
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-black uppercase tracking-tight text-foreground sm:text-5xl">
+          <h1 className="font-display text-4xl font-black uppercase tracking-tight text-foreground sm:text-5xl">
             Venues
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Showing {totalItems} premium arenas near your location
+            Showing{" "}
+            <span className="font-semibold text-foreground">{totalItems}</span>{" "}
+            premium arenas
           </p>
         </div>
 
-        <div className="flex items-center gap-2 rounded-sm border border-border bg-card p-1">
+        {/* View Toggle */}
+        <div className="flex items-center gap-1 rounded-sm border border-border bg-card p-1">
           <Button
             type="button"
             size="sm"
             className={cn(
-              "h-8 rounded-sm px-3",
+              "h-8 gap-1.5 rounded-sm px-3 text-xs",
               filters.view !== "grid" && "bg-transparent",
             )}
             variant={filters.view === "grid" ? "default" : "ghost"}
@@ -284,14 +285,14 @@ export function VenueCatalog({
               });
             }}
           >
-            <Grid3X3 className="h-4 w-4" />
+            <Grid3X3 className="h-3.5 w-3.5" />
             Grid
           </Button>
           <Button
             type="button"
             size="sm"
             className={cn(
-              "h-8 rounded-sm px-3",
+              "h-8 gap-1.5 rounded-sm px-3 text-xs",
               filters.view !== "map" && "bg-transparent",
             )}
             variant={filters.view === "map" ? "default" : "ghost"}
@@ -302,12 +303,13 @@ export function VenueCatalog({
               });
             }}
           >
-            <Map className="h-4 w-4" />
+            <Map className="h-3.5 w-3.5" />
             Map
           </Button>
         </div>
       </div>
 
+      {/* Main Content Grid */}
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         <FilteringSidebar
           hasActiveFilters={hasActiveFilters}
@@ -404,24 +406,25 @@ export function VenueCatalog({
             onRetry={() => courtsQuery.refetch()}
           />
 
+          {/* Pagination */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-6">
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
               Page {String(currentPage).padStart(2, "0")} /{" "}
               {String(totalPages).padStart(2, "0")}
             </p>
 
             <div className="flex items-center gap-2">
               {courtsQuery.isFetching ? (
-                <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                  <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
-                  Updating
+                <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <LoaderCircle className="h-3.5 w-3.5 animate-spin text-primary" />
+                  Updating...
                 </span>
               ) : null}
 
               <Button
                 type="button"
                 variant="outline"
-                size="icon"
+                size="icon-sm"
                 disabled={currentPage <= 1}
                 onClick={() => setPage(Math.max(1, currentPage - 1))}
                 className="rounded-sm"
@@ -432,7 +435,7 @@ export function VenueCatalog({
               <Button
                 type="button"
                 variant="default"
-                size="icon"
+                size="icon-sm"
                 disabled={currentPage >= totalPages}
                 onClick={() => setPage(Math.min(totalPages, currentPage + 1))}
                 className="rounded-sm"

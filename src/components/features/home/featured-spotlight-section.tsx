@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { MapPin } from "lucide-react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useHomeLandingCourtsQuery } from "@/hooks/queries/use-courts-query";
 import { VENUE_FALLBACK_IMAGE } from "@/lib/placeholders";
 import type { CourtListItem } from "@/types/court.types";

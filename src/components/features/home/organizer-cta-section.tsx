@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowUpRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 import { authClient } from "@/lib/auth-client";
 import { userService } from "@/service/user.service";

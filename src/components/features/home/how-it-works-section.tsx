@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckCircle2, Compass, Trophy } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 import { steps } from "./data";
 import { Reveal } from "@/components/shared/Reveal";

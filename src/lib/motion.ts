@@ -1,22 +1,27 @@
-import type { Transition, Variants } from "framer-motion";
+import type { Transition, Variants } from "motion/react";
 
 /* ==========================================================================
-   Easing curves
+   Easing curves — refined for athletic, premium feel
    ========================================================================== */
 export const ease = {
-  out: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+  /** Smooth deceleration — primary easing for reveals */
+  out: [0.16, 1, 0.3, 1] as [number, number, number, number],
+  /** Standard ease-in-out */
   inOut: [0.4, 0, 0.2, 1] as [number, number, number, number],
+  /** Gentle spring overshoot */
   spring: [0.34, 1.56, 0.64, 1] as [number, number, number, number],
+  /** Athletic snap — punchy decisive */
+  snap: [0.22, 1, 0.36, 1] as [number, number, number, number],
 } as const;
 
 /* ==========================================================================
-   Durations
+   Durations — snappier per sports media spec
    ========================================================================== */
 export const duration = {
   fast: 0.15,
-  base: 0.2,
-  slow: 0.4,
-  slower: 0.6,
+  base: 0.18,
+  slow: 0.32,
+  slower: 0.5,
 } as const;
 
 /* ==========================================================================
@@ -27,8 +32,8 @@ export const transitions = {
   slow: { duration: duration.slow, ease: ease.out } satisfies Transition,
   spring: {
     type: "spring",
-    stiffness: 260,
-    damping: 22,
+    stiffness: 280,
+    damping: 26,
   } satisfies Transition,
 } as const;
 
@@ -51,6 +56,16 @@ export const fadeUpVariants: Variants = {
 
 export const fadeDownVariants: Variants = {
   hidden: { opacity: 0, y: -16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: duration.slow, ease: ease.out },
+  },
+};
+
+/** Bigger upward slide — more dramatic than fadeUp */
+export const slideUpVariants: Variants = {
+  hidden: { opacity: 0, y: 32 },
   visible: {
     opacity: 1,
     y: 0,
@@ -85,6 +100,17 @@ export const scaleVariants: Variants = {
   },
 };
 
+/** Card-style scale-up reveal */
+export const scaleUpVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.92, y: 12 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: duration.slow, ease: ease.out },
+  },
+};
+
 export const blurVariants: Variants = {
   hidden: { opacity: 0, filter: "blur(8px)" },
   visible: {
@@ -105,19 +131,19 @@ export const staggerContainer = (stagger = 0.08, delayChildren = 0): Variants =>
 });
 
 /* ==========================================================================
-   Page transition
+   Page transition — snappier 250ms feel
    ========================================================================== */
 export const pageVariants: Variants = {
-  hidden: { opacity: 0, y: 12 },
+  hidden: { opacity: 0, y: 8 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: duration.slow, ease: ease.out },
+    transition: { duration: 0.25, ease: ease.out },
   },
   exit: {
     opacity: 0,
-    y: -8,
-    transition: { duration: duration.base, ease: ease.out },
+    y: -6,
+    transition: { duration: 0.18, ease: ease.out },
   },
 };
 
@@ -128,9 +154,11 @@ export const revealVariantsMap = {
   fadeUp: fadeUpVariants,
   fadeDown: fadeDownVariants,
   fade: fadeVariants,
+  slideUp: slideUpVariants,
   slideLeft: slideLeftVariants,
   slideRight: slideRightVariants,
   scale: scaleVariants,
+  scaleUp: scaleUpVariants,
   blur: blurVariants,
 } as const;
 

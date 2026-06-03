@@ -4,92 +4,101 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ==========================================================================
-   OBSIDIAN — Light Theme ("Daylight Premium")
+   ARENA — Light Theme ("Daylight Arena")
    ========================================================================== */
 :root {
-  /* Core surfaces — clean, bright, breathable */
-  --background: #fafafa;
-  --foreground: #09090b;
+  /* Core surfaces — crisp, clean, athletic */
+  --background: #f8f9fc;
+  --foreground: #0a0e1a;
   --surface: #ffffff;
-  --surface-2: #f4f4f5;
-  --surface-3: #e4e4e7;
-  --surface-glass: rgba(255, 255, 255, 0.78);
+  --surface-2: #f1f3f8;
+  --surface-3: #e2e6ef;
+  --surface-glass: rgba(255, 255, 255, 0.82);
 
   /* Cards & popovers */
   --card: #ffffff;
-  --card-foreground: #09090b;
+  --card-foreground: #0a0e1a;
   --popover: #ffffff;
-  --popover-foreground: #09090b;
+  --popover-foreground: #0a0e1a;
 
-  /* Borders — ultra-subtle, breathable strokes */
-  --border: rgba(0, 0, 0, 0.06);
-  --border-strong: rgba(0, 0, 0, 0.1);
-  --input: rgba(0, 0, 0, 0.08);
+  /* Borders — clean, visible structure */
+  --border: rgba(10, 14, 26, 0.08);
+  --border-strong: rgba(10, 14, 26, 0.14);
+  --input: rgba(10, 14, 26, 0.10);
 
-  /* Text — crisp hierarchy */
-  --text-primary: #09090b;
-  --text-secondary: #52525b;
-  --text-tertiary: #a1a1aa;
-  --muted: #f4f4f5;
-  --muted-foreground: #52525b;
+  /* Text — bold hierarchy */
+  --text-primary: #0a0e1a;
+  --text-secondary: #4a5568;
+  --text-tertiary: #8896ab;
+  --muted: #f1f3f8;
+  --muted-foreground: #4a5568;
 
-  /* Primary — Deep Electric Indigo */
-  --primary: #5b4ef5;
-  --primary-hover: #6c5cff;
-  --primary-soft: rgba(91, 78, 245, 0.08);
+  /* Primary — Electric Blue (trust, sports data, technology) */
+  --primary: #0066ff;
+  --primary-hover: #0052cc;
+  --primary-soft: rgba(0, 102, 255, 0.08);
   --primary-foreground: #ffffff;
   --primary-fg: #ffffff;
 
-  /* Accent — Premium Coral */
-  --accent: #f97066;
-  --accent-hover: #fb8a82;
-  --accent-soft: rgba(249, 112, 102, 0.08);
-  --accent-foreground: #ffffff;
-  --accent-fg: #ffffff;
+  /* Accent — Stadium Green (live, active, energetic) */
+  --accent: #00d26a;
+  --accent-hover: #00b85c;
+  --accent-soft: rgba(0, 210, 106, 0.08);
+  --accent-foreground: #0a0e1a;
+  --accent-fg: #0a0e1a;
 
-  /* Secondary — muted violet for badges/chips */
-  --secondary: rgba(91, 78, 245, 0.08);
-  --secondary-foreground: #4338ca;
+  /* Tertiary — Victory Gold (premium, achievement) */
+  --tertiary: #ffb800;
+  --tertiary-hover: #e6a600;
+  --tertiary-soft: rgba(255, 184, 0, 0.08);
+
+  /* Action — Signal Red (urgency, CTAs, excitement) */
+  --action: #ff3d00;
+  --action-hover: #e63600;
+  --action-soft: rgba(255, 61, 0, 0.08);
+
+  /* Secondary */
+  --secondary: rgba(0, 102, 255, 0.06);
+  --secondary-foreground: #0066ff;
 
   /* Semantic statuses */
-  --success: #16a34a;
-  --success-foreground: #ffffff;
-  --warning: #d97706;
-  --warning-foreground: #ffffff;
-  --error: #dc2626;
+  --success: #00d26a;
+  --success-foreground: #0a0e1a;
+  --warning: #ffb800;
+  --warning-foreground: #0a0e1a;
+  --error: #ff3d00;
   --error-foreground: #ffffff;
-  --info: #2563eb;
+  --info: #0066ff;
   --info-foreground: #ffffff;
-  --destructive: #dc2626;
+  --destructive: #ff3d00;
   --destructive-foreground: #ffffff;
 
   /* Focus ring */
-  --ring: #5b4ef5;
+  --ring: #0066ff;
 
-  /* Charts */
-  --chart-1: #5b4ef5;
-  --chart-2: #ea580c;
-  --chart-3: #7c6aef;
-  --chart-4: #d97706;
-  --chart-5: #16a34a;
+  /* Charts — sports-oriented */
+  --chart-1: #0066ff;
+  --chart-2: #00d26a;
+  --chart-3: #ffb800;
+  --chart-4: #ff3d00;
+  --chart-5: #8b5cf6;
 
   /* Sidebar — elevated dark panel */
-  --sidebar: #0c0c10;
-  --sidebar-foreground: #f4f4f5;
-  --sidebar-primary: #7c6aef;
-  --sidebar-primary-foreground: #08080c;
-  --sidebar-accent: #16161f;
-  --sidebar-accent-foreground: #f4f4f5;
+  --sidebar: #0c1020;
+  --sidebar-foreground: #e8ecf4;
+  --sidebar-primary: #3b82f6;
+  --sidebar-primary-foreground: #080b14;
+  --sidebar-accent: #141c2e;
+  --sidebar-accent-foreground: #e8ecf4;
   --sidebar-border: rgba(255, 255, 255, 0.06);
-  --sidebar-ring: #7c6aef;
+  --sidebar-ring: #3b82f6;
 
-  /* Typography — premium stack */
+  /* Typography — athletic stack */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: var(--font-instrument-serif), ui-serif, Georgia, "Times New Roman", serif;
-  --font-label: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-label: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", "Cascadia Code", monospace;
-  --font-heading: var(--font-instrument-serif), ui-serif, Georgia, serif;
-  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-heading: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
 
   /* Radius scale — consistent, modern */
   --radius: 0.875rem;
@@ -100,8 +109,8 @@
   --radius-xl: 1rem;
   --radius-2xl: 1.25rem;
 
-  /* Shadows — premium colored elevation system */
-  --shadow-color: 240 6% 10%;
+  /* Shadows — blue-tinted for sports feel */
+  --shadow-color: 220 60% 50%;
   --shadow-2xs: 0 1px 2px 0 hsl(var(--shadow-color) / 0.03);
   --shadow-xs: 0 1px 2px 0 hsl(var(--shadow-color) / 0.04);
   --shadow-sm:
@@ -117,16 +126,16 @@
     0 8px 24px -4px hsl(var(--shadow-color) / 0.08),
     0 0 0 1px hsl(var(--shadow-color) / 0.02);
   --shadow-xl:
-    0 16px 48px -8px hsl(var(--shadow-color) / 0.1),
+    0 16px 48px -8px hsl(var(--shadow-color) / 0.10),
     0 0 0 1px hsl(var(--shadow-color) / 0.03);
   --shadow-2xl:
     0 24px 64px -12px hsl(var(--shadow-color) / 0.14);
   --shadow-glow-primary:
-    0 0 0 3px rgba(91, 78, 245, 0.12),
-    0 8px 24px -4px rgba(91, 78, 245, 0.3);
+    0 0 0 3px rgba(0, 102, 255, 0.12),
+    0 8px 24px -4px rgba(0, 102, 255, 0.3);
   --shadow-glow-accent:
-    0 0 0 3px rgba(234, 88, 12, 0.12),
-    0 8px 24px -4px rgba(234, 88, 12, 0.3);
+    0 0 0 3px rgba(0, 210, 106, 0.12),
+    0 8px 24px -4px rgba(0, 210, 106, 0.3);
 
   /* Z-index scale */
   --z-dropdown: 1000;
@@ -148,107 +157,117 @@
 }
 
 /* ==========================================================================
-   OBSIDIAN — Dark Theme ("Midnight Luxury")
+   ARENA — Dark Theme ("Stadium Night")
    ========================================================================== */
 .dark {
-  /* Core surfaces — deep navy-black with subtle warmth */
-  --background: #08080c;
-  --foreground: #f4f4f5;
-  --surface: #0e0e14;
-  --surface-2: #16161f;
-  --surface-3: #1e1e28;
-  --surface-glass: rgba(14, 14, 20, 0.82);
+  /* Core surfaces — deep stadium dark */
+  --background: #080b14;
+  --foreground: #e8ecf4;
+  --surface: #0d1220;
+  --surface-2: #141c2e;
+  --surface-3: #1c2640;
+  --surface-glass: rgba(13, 18, 32, 0.85);
 
-  --card: #0e0e14;
-  --card-foreground: #f4f4f5;
-  --popover: #0e0e14;
-  --popover-foreground: #f4f4f5;
+  --card: #0d1220;
+  --card-foreground: #e8ecf4;
+  --popover: #0d1220;
+  --popover-foreground: #e8ecf4;
 
-  /* Borders — barely visible structure */
-  --border: rgba(255, 255, 255, 0.05);
-  --border-strong: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.06);
+  /* Borders — subtle structure in dark */
+  --border: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.10);
+  --input: rgba(255, 255, 255, 0.08);
 
-  --text-primary: #f4f4f5;
-  --text-secondary: #a1a1aa;
-  --text-tertiary: #52525b;
-  --muted: #16161f;
-  --muted-foreground: #a1a1aa;
+  --text-primary: #e8ecf4;
+  --text-secondary: #8896ab;
+  --text-tertiary: #4a5568;
+  --muted: #141c2e;
+  --muted-foreground: #8896ab;
 
-  /* Primary — muted luxury violet */
-  --primary: #7c6aef;
-  --primary-hover: #9180f3;
-  --primary-soft: rgba(124, 106, 239, 0.1);
-  --primary-foreground: #08080c;
-  --primary-fg: #08080c;
+  /* Primary — brighter blue for dark backgrounds */
+  --primary: #3b82f6;
+  --primary-hover: #60a5fa;
+  --primary-soft: rgba(59, 130, 246, 0.12);
+  --primary-foreground: #080b14;
+  --primary-fg: #080b14;
 
-  /* Accent — premium coral */
-  --accent: #fb8a82;
-  --accent-hover: #ffa39c;
-  --accent-soft: rgba(251, 138, 130, 0.1);
-  --accent-foreground: #08080c;
-  --accent-fg: #08080c;
+  /* Accent — vivid green for dark */
+  --accent: #34d399;
+  --accent-hover: #6ee7b7;
+  --accent-soft: rgba(52, 211, 153, 0.12);
+  --accent-foreground: #080b14;
+  --accent-fg: #080b14;
+
+  /* Tertiary — gold */
+  --tertiary: #fbbf24;
+  --tertiary-hover: #fcd34d;
+  --tertiary-soft: rgba(251, 191, 36, 0.12);
+
+  /* Action — signal red */
+  --action: #f87171;
+  --action-hover: #fca5a5;
+  --action-soft: rgba(248, 113, 113, 0.12);
 
   /* Secondary */
-  --secondary: rgba(124, 106, 239, 0.08);
-  --secondary-foreground: #c4b5fd;
+  --secondary: rgba(59, 130, 246, 0.10);
+  --secondary-foreground: #93bbfd;
 
-  /* Semantic statuses — luminous on dark */
-  --success: #4ade80;
-  --success-foreground: #08080c;
+  /* Semantic — luminous on dark */
+  --success: #34d399;
+  --success-foreground: #080b14;
   --warning: #fbbf24;
-  --warning-foreground: #08080c;
+  --warning-foreground: #080b14;
   --error: #f87171;
-  --error-foreground: #08080c;
+  --error-foreground: #080b14;
   --info: #60a5fa;
-  --info-foreground: #08080c;
+  --info-foreground: #080b14;
   --destructive: #f87171;
-  --destructive-foreground: #08080c;
+  --destructive-foreground: #080b14;
 
-  --ring: #7c6aef;
+  --ring: #3b82f6;
 
-  --chart-1: #7c6aef;
-  --chart-2: #f97316;
-  --chart-3: #9180f3;
-  --chart-4: #fbbf24;
-  --chart-5: #4ade80;
+  --chart-1: #3b82f6;
+  --chart-2: #34d399;
+  --chart-3: #fbbf24;
+  --chart-4: #f87171;
+  --chart-5: #a78bfa;
 
-  /* Sidebar — slightly elevated */
-  --sidebar: #0d0d12;
-  --sidebar-foreground: #f4f4f5;
-  --sidebar-primary: #7c6aef;
-  --sidebar-primary-foreground: #08080c;
-  --sidebar-accent: #16161f;
-  --sidebar-accent-foreground: #f4f4f5;
-  --sidebar-border: rgba(255, 255, 255, 0.05);
-  --sidebar-ring: #7c6aef;
+  /* Sidebar */
+  --sidebar: #0a0f1c;
+  --sidebar-foreground: #e8ecf4;
+  --sidebar-primary: #3b82f6;
+  --sidebar-primary-foreground: #080b14;
+  --sidebar-accent: #141c2e;
+  --sidebar-accent-foreground: #e8ecf4;
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+  --sidebar-ring: #3b82f6;
 
-  /* Shadows — deeper, colored for dark */
-  --shadow-2xs: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.45);
+  /* Shadows — deeper, blue-tinted */
+  --shadow-2xs: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.55);
   --shadow-sm:
-    0 1px 2px 0 rgba(0, 0, 0, 0.45),
+    0 1px 2px 0 rgba(0, 0, 0, 0.55),
     0 0 0 1px rgba(255, 255, 255, 0.02);
   --shadow:
-    0 2px 4px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px 0 rgba(0, 0, 0, 0.6),
     0 0 0 1px rgba(255, 255, 255, 0.02);
   --shadow-md:
-    0 4px 12px -2px rgba(0, 0, 0, 0.55),
+    0 4px 12px -2px rgba(0, 0, 0, 0.65),
     0 0 0 1px rgba(255, 255, 255, 0.02);
   --shadow-lg:
-    0 8px 24px -4px rgba(0, 0, 0, 0.6),
+    0 8px 24px -4px rgba(0, 0, 0, 0.7),
     0 0 0 1px rgba(255, 255, 255, 0.02);
   --shadow-xl:
-    0 16px 48px -8px rgba(0, 0, 0, 0.65),
+    0 16px 48px -8px rgba(0, 0, 0, 0.75),
     0 0 0 1px rgba(255, 255, 255, 0.03);
   --shadow-2xl:
-    0 24px 64px -12px rgba(0, 0, 0, 0.75);
+    0 24px 64px -12px rgba(0, 0, 0, 0.85);
   --shadow-glow-primary:
-    0 0 0 3px rgba(124, 106, 239, 0.15),
-    0 8px 24px -4px rgba(124, 106, 239, 0.4);
+    0 0 0 3px rgba(59, 130, 246, 0.2),
+    0 8px 24px -4px rgba(59, 130, 246, 0.4);
   --shadow-glow-accent:
-    0 0 0 3px rgba(249, 115, 22, 0.15),
-    0 8px 24px -4px rgba(249, 115, 22, 0.4);
+    0 0 0 3px rgba(52, 211, 153, 0.2),
+    0 8px 24px -4px rgba(52, 211, 153, 0.4);
 }
 
 /* ==========================================================================
@@ -277,6 +296,14 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-hover: var(--accent-hover);
   --color-accent-soft: var(--accent-soft);
+
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-hover: var(--tertiary-hover);
+  --color-tertiary-soft: var(--tertiary-soft);
+
+  --color-action: var(--action);
+  --color-action-hover: var(--action-hover);
+  --color-action-soft: var(--action-soft);
 
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
@@ -308,7 +335,6 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
 
-  --color-surface-3: var(--surface-3);
   --color-surface-glass: var(--surface-glass);
 
   --color-sidebar: var(--sidebar);
@@ -325,7 +351,6 @@
   --font-display: var(--font-display);
   --font-label: var(--font-label);
   --font-heading: var(--font-heading);
-  --font-serif: var(--font-serif);
 
   --radius-xs: var(--radius-xs);
   --radius-sm: var(--radius-sm);
@@ -394,7 +419,7 @@
 }
 
 /* ==========================================================================
-   Base layer — premium defaults
+   Base layer — athletic defaults
    ========================================================================== */
 @layer base {
   * {
@@ -419,6 +444,7 @@
     font-family: var(--font-display);
     letter-spacing: -0.02em;
     color: var(--text-primary);
+    font-weight: 700;
   }
 
   /* Selection — subtle brand tint */
@@ -439,7 +465,7 @@
 }
 
 /* ==========================================================================
-   Utility classes — premium surface treatments
+   Utility classes — sports surface treatments
    ========================================================================== */
 @layer utilities {
   /* Glass — refined, consistent */
@@ -477,7 +503,7 @@
     animation: shimmer 2s linear infinite;
   }
 
-  /* Text gradients — premium accent */
+  /* Text gradients — sports accent */
   .text-gradient-primary {
     background-image: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
     -webkit-background-clip: text;
@@ -496,6 +522,12 @@
     background-clip: text;
     color: transparent;
   }
+  .text-gradient-sports {
+    background-image: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, var(--tertiary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 
   /* Background gradients */
   .bg-gradient-primary {
@@ -504,6 +536,9 @@
   .bg-gradient-aurora {
     background-image: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   }
+  .bg-gradient-sports {
+    background-image: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, var(--tertiary) 100%);
+  }
 
   /* Focus ring utility */
   .ring-focus {
@@ -511,8 +546,6 @@
       0 0 0 2px var(--background),
       0 0 0 4px color-mix(in oklab, var(--ring) 50%, transparent);
   }
-
-
 }
 
 /* ==========================================================================

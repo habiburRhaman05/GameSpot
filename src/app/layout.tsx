@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Geist_Mono, Instrument_Serif, Inter } from "next/font/google";
+import { Geist_Mono, Inter, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/components/providers/query-provider";
@@ -12,16 +12,8 @@ const inter = Inter({
   display: "swap",
 });
 
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const interTight = Inter_Tight({
+  variable: "--font-inter-tight",
   subsets: ["latin"],
   display: "swap",
 });
@@ -36,8 +28,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F8F8FB" },
-    { media: "(prefers-color-scheme: dark)", color: "#0A0B14" },
+    { media: "(prefers-color-scheme: light)", color: "#f8f9fc" },
+    { media: "(prefers-color-scheme: dark)", color: "#080b14" },
   ],
 };
 
@@ -58,8 +50,7 @@ export default function RootLayout({
   const htmlClassName = [
     "antialiased",
     inter.variable,
-    instrumentSerif.variable,
-    dmSans.variable,
+    interTight.variable,
     geistMono.variable,
     "font-sans",
   ].join(" ");

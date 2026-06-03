@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { ArrowUpRight, MapPin } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 import { useHomeLandingCourtsQuery } from "@/hooks/queries/use-courts-query";
 import type { CourtListItem } from "@/types/court.types";

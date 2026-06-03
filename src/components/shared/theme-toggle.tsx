@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -22,7 +22,6 @@ export function ThemeToggle({ className, size = 40 }: ThemeToggleProps) {
   }, []);
 
   if (!mounted) {
-    // Reserve space — prevents layout shift while next-themes hydrates
     return (
       <div
         aria-hidden
@@ -41,38 +40,50 @@ export function ThemeToggle({ className, size = 40 }: ThemeToggleProps) {
       aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
       title={isDark ? "Switch to light theme" : "Switch to dark theme"}
       className={cn(
-        "relative inline-flex items-center justify-center overflow-hidden rounded-full",
-        "border border-border bg-surface/60 text-foreground/80",
-        "backdrop-blur-md transition-all duration-200",
-        "hover:border-border-strong hover:text-foreground hover:bg-surface",
+        "group/theme relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full",
+        "border border-border bg-surface/60 text-foreground/85 backdrop-blur-md",
+        "transition-all duration-200",
+        "hover:border-primary/40 hover:text-foreground hover:bg-surface hover:shadow-[0_0_0_3px_var(--primary-soft)]",
         "focus-visible:outline-none",
-        "active:scale-[0.95]",
+        "active:scale-[0.94]",
         className,
       )}
       style={{ width: size, height: size }}
     >
+      {/* Soft halo on hover */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-br from-primary/0 via-primary/0 to-accent/0 opacity-0 transition-opacity duration-300 group-hover/theme:from-primary/10 group-hover/theme:to-accent/10 group-hover/theme:opacity-100"
+      />
+
       <AnimatePresence mode="wait" initial={false}>
         {isDark ? (
           <motion.span
             key="moon"
-            initial={{ opacity: 0, rotate: -45, scale: 0.6 }}
+            initial={{ opacity: 0, rotate: -60, scale: 0.5 }}
             animate={{ opacity: 1, rotate: 0, scale: 1 }}
-            exit={{ opacity: 0, rotate: 45, scale: 0.6 }}
-            transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="inline-flex"
+            exit={{ opacity: 0, rotate: 60, scale: 0.5 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="relative inline-flex"
           >
-            <Moon className="h-[18px] w-[18px]" strokeWidth={2} />
+            <Moon
+              className="h-[18px] w-[18px] text-primary"
+              strokeWidth={2}
+            />
           </motion.span>
         ) : (
           <motion.span
             key="sun"
-            initial={{ opacity: 0, rotate: 45, scale: 0.6 }}
+            initial={{ opacity: 0, rotate: 60, scale: 0.5 }}
             animate={{ opacity: 1, rotate: 0, scale: 1 }}
-            exit={{ opacity: 0, rotate: -45, scale: 0.6 }}
-            transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="inline-flex"
+            exit={{ opacity: 0, rotate: -60, scale: 0.5 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="relative inline-flex"
           >
-            <Sun className="h-[18px] w-[18px]" strokeWidth={2} />
+            <Sun
+              className="h-[18px] w-[18px] text-tertiary"
+              strokeWidth={2}
+            />
           </motion.span>
         )}
       </AnimatePresence>

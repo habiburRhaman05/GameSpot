@@ -4,29 +4,23 @@
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "motion/react";
-import { BotMessageSquare, X, Send, Loader2 } from "lucide-react";
+import { BotMessageSquare, X, Send, Sparkles } from "lucide-react";
 import { useChat } from "@ai-sdk/react";
 import Link from "next/link";
 
-type SearchCourt = { id: string; slug: string; name: string; type: string; price: number; location: string };
-type SearchResult = { success?: boolean; message?: string; courts?: SearchCourt[] };
+import { cn } from "@/lib/utils";
 
 export function ChatAssistant() {
   const [isOpen, setIsOpen] = useState(false);
-  const { messages, sendMessage, status, error } = useChat();
+  const { messages, sendMessage, status } = useChat();
   const [input, setInput] = useState("");
   const isLoading = status === "submitted" || status === "streaming";
   const lastSentRef = useRef<{ text: string; time: number } | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const [isFirstOpen, setIsFirstOpen] = useState(true);
-
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
 
   useEffect(() => {
-    if (isOpen && isFirstOpen) {
-      setIsFirstOpen(false);
-    }
-  }, [isOpen, isFirstOpen]);
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -34,153 +28,219 @@ export function ChatAssistant() {
     if (!trimmed || isLoading) return;
     const normalized = trimmed.replace(/\s+/g, " ").toLowerCase();
     const now = Date.now();
-    if (lastSentRef.current && lastSentRef.current.text === normalized && now - lastSentRef.current.time < 5000) return;
+    if (
+      lastSentRef.current &&
+      lastSentRef.current.text === normalized &&
+      now - lastSentRef.current.time < 5000
+    )
+      return;
     lastSentRef.current = { text: normalized, time: now };
     sendMessage({ text: trimmed });
     setInput("");
   };
 
-  if (!isOpen) {
-    return (
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-fg shadow-lg shadow-primary/20 transition-shadow hover:shadow-primary/30"
-      >
-        <BotMessageSquare size={24} />
-      </motion.button>
-    );
-  }
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 20, scale: 0.95 }}
-      transition={{ duration: 0.2, ease: "easeOut" }}
-      className="fixed bottom-6 right-6 z-50 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl border border-border/60 bg-surface-glass backdrop-blur-xl shadow-2xl"
-    >
-      {/* Header */}
-      <div className="flex items-center justify-between bg-primary px-4 py-3 text-primary-fg">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-fg/20">
-            <BotMessageSquare size={16} />
-          </div>
-          <div>
-            <p className="text-sm font-semibold">CourtBot AI</p>
-            <p className="text-[10px] opacity-70">Online</p>
-          </div>
-        </div>
-        <button onClick={() => setIsOpen(false)} className="rounded-lg p-1.5 opacity-70 hover:opacity-100 hover:bg-white/10 transition-colors">
-          <X size={18} />
-        </button>
-      </div>
-
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-3 bg-background/50 text-sm">
-        {messages.length === 0 && (
-          <div className="flex h-full flex-col items-center justify-center text-center text-text-tertiary px-4">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
-              <BotMessageSquare className="h-6 w-6 text-primary" />
-            </div>
-            <p className="font-medium text-foreground">Hi! I'm CourtBot</p>
-            <p className="mt-1 text-xs">Ask me to find courts or help with your bookings.</p>
-          </div>
-        )}
-
-        {messages.map((m) => (
-          <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-            <div
-              className={`max-w-[88%] rounded-2xl px-4 py-2.5 ${
-                m.role === "user"
-                  ? "bg-primary text-primary-fg rounded-tr-none"
-                  : "bg-card border border-border/60 text-foreground rounded-tl-none"
-              }`}
-            >
-              <div className="prose prose-sm dark:prose-invert w-full max-w-none [&>p]:my-0 [&>ul]:my-1 [&_a]:text-blue-500 [&_a]:underline">
-                <ReactMarkdown
-                  components={{
-                    a: ({ href, children }) =>
-                      href?.startsWith("/") ? <Link href={href} className="font-medium">{children}</Link>
-                        : <a href={href!} target="_blank" rel="noopener noreferrer" className="font-medium">{children}</a>,
-                  }}
-                >
-                  {m.parts?.filter((p) => p.type === "text").map((p) => p.text).join("") || ""}
-                </ReactMarkdown>
-              </div>
-
-              {/* {m.parts?.filter((p) => p.type === "tool-invocation" && p.toolCallId.toolName === "searchCourts").map((p) => {
-                const ti = (p as any).toolInvocation;
-                const payload = ti?.state === "result" ? ti?.result as SearchResult : null;
-                const isResolved = ti?.state === "result";
-                return (
-                  <div key={ti?.toolCallId} className="mt-2">
-                    {!isResolved && (
-                      <span className="inline-flex items-center gap-1.5 rounded-lg bg-primary/10 px-2 py-1 text-[10px] font-medium text-primary">
-                        <Loader2 size={10} className="animate-spin" /> Searching courts...
-                      </span>
-                    )}
-                    {isResolved && payload?.success && payload?.courts?.length && (
-                      <div className="mt-2 space-y-1.5">
-                        {payload.courts.map((court) => (
-                          <Link key={court.id} href={`/venues/${court.slug}`}
-                            className="group flex items-center justify-between rounded-xl border border-border/60 bg-surface-2/30 p-2.5 transition-colors hover:border-primary/30">
-                            <div className="min-w-0">
-                              <p className="text-xs font-medium text-foreground truncate">{court.name}</p>
-                              <p className="text-[10px] text-text-tertiary">{court.type} · {court.location}</p>
-                            </div>
-                            <span className="shrink-0 text-xs font-semibold text-primary">${court.price}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                    {isResolved && payload?.success === false && (
-                      <p className="mt-1 text-[11px] text-destructive">{payload.message}</p>
-                    )}
-                  </div>
-                );
-              })} */}
-            </div>
-          </div>
-        ))}
-
-        {isLoading && messages[messages.length - 1]?.role === "user" && (
-          <div className="flex justify-start">
-            <div className="rounded-2xl rounded-tl-none bg-card border border-border/60 px-4 py-3">
-              <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
-                <span className="flex gap-0.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-text-tertiary animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <span className="h-1.5 w-1.5 rounded-full bg-text-tertiary animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <span className="h-1.5 w-1.5 rounded-full bg-text-tertiary animate-bounce" style={{ animationDelay: "300ms" }} />
-                </span>
-              </span>
-            </div>
-          </div>
-        )}
-
-        <div ref={bottomRef} />
-      </div>
-
-      {/* Input */}
-      <form onSubmit={handleSubmit} className="border-t border-border/60 bg-card p-3">
-        <div className="flex items-center gap-2 rounded-xl border border-input bg-background/50 px-3 py-2 transition-colors focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a message..."
-            disabled={isLoading}
-            className="flex-1 bg-transparent text-sm text-foreground outline-none border-0 placeholder:text-text-tertiary"
+    <AnimatePresence mode="wait">
+      {!isOpen ? (
+        <motion.button
+          key="fab"
+          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: 20 }}
+          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.96 }}
+          onClick={() => setIsOpen(true)}
+          aria-label="Open AI assistant"
+          className="group/fab fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary to-accent text-white shadow-[0_12px_32px_-8px_rgba(0,102,255,0.55)] transition-shadow duration-300 hover:shadow-[0_16px_40px_-8px_rgba(0,102,255,0.7)] sm:bottom-6 sm:right-6"
+        >
+          {/* Inner gradient highlight */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/20 to-transparent"
           />
-          <button
-            type="submit"
-            disabled={isLoading || !input.trim()}
-            className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-fg transition-all hover:bg-primary-hover disabled:opacity-50"
+          {/* Pulse ring */}
+          <span
+            aria-hidden
+            className="absolute inset-0 rounded-2xl ring-2 ring-primary/40 animate-pulse-soft"
+          />
+          <BotMessageSquare size={22} strokeWidth={2.2} className="relative z-10" />
+          {/* Live dot */}
+          <span
+            aria-hidden
+            className="absolute right-2 top-2 z-10 inline-flex h-2 w-2 rounded-full bg-accent shadow-[0_0_6px_var(--accent)]"
+          />
+        </motion.button>
+      ) : (
+        <motion.div
+          key="panel"
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.95 }}
+          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed bottom-5 right-5 z-50 flex h-[520px] w-[360px] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-3xl border border-border-strong/60 bg-surface-glass shadow-[0_24px_64px_-12px_rgba(0,0,0,0.5)] backdrop-blur-2xl sm:bottom-6 sm:right-6"
+        >
+          {/* Header — gradient sports band */}
+          <div className="relative flex items-center justify-between overflow-hidden bg-gradient-to-br from-primary via-primary to-accent px-4 py-3.5 text-white">
+            {/* Animated gradient orbs */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -top-10 -left-10 h-24 w-24 rounded-full bg-white/10 blur-2xl"
+            />
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -bottom-10 -right-10 h-24 w-24 rounded-full bg-accent/30 blur-2xl"
+            />
+
+            <div className="relative flex items-center gap-2.5">
+              <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-white/15 backdrop-blur-md ring-1 ring-white/20">
+                <Sparkles size={16} strokeWidth={2.2} />
+              </span>
+              <div className="flex flex-col leading-tight">
+                <p className="font-display text-[14px] font-bold tracking-tight">
+                  CourtBot AI
+                </p>
+                <p className="flex items-center gap-1.5 text-[10px] font-medium opacity-85">
+                  <span className="inline-flex h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_6px_var(--accent)]" />
+                  Online · Ready to assist
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              aria-label="Close assistant"
+              className="relative inline-flex h-8 w-8 items-center justify-center rounded-lg text-white/80 transition-all duration-200 hover:bg-white/15 hover:text-white active:scale-95"
+            >
+              <X size={16} strokeWidth={2.2} />
+            </button>
+          </div>
+
+          {/* Messages */}
+          <div className="flex-1 space-y-3 overflow-y-auto bg-background/40 p-4 text-sm">
+            {messages.length === 0 && (
+              <div className="flex h-full flex-col items-center justify-center px-6 text-center">
+                <div className="relative mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-soft to-accent/20 ring-1 ring-primary/20">
+                  <BotMessageSquare className="h-7 w-7 text-primary" strokeWidth={2} />
+                </div>
+                <p className="font-display text-base font-bold text-foreground">
+                  Hi! I'm CourtBot
+                </p>
+                <p className="mt-1.5 max-w-[15rem] text-[12px] leading-relaxed text-text-secondary">
+                  Ask me to find courts, suggest venues, or help with your bookings.
+                </p>
+                <div className="mt-4 flex flex-wrap justify-center gap-1.5">
+                  {["Find tennis courts", "Best venues nearby", "How to book?"].map(
+                    (q) => (
+                      <button
+                        key={q}
+                        type="button"
+                        onClick={() => setInput(q)}
+                        className="rounded-full border border-border bg-surface/50 px-2.5 py-1 text-[10.5px] font-medium text-text-secondary transition-all duration-200 hover:border-primary/30 hover:bg-primary-soft hover:text-primary"
+                      >
+                        {q}
+                      </button>
+                    ),
+                  )}
+                </div>
+              </div>
+            )}
+
+            {messages.map((m) => (
+              <div
+                key={m.id}
+                className={cn(
+                  "flex",
+                  m.role === "user" ? "justify-end" : "justify-start",
+                )}
+              >
+                <div
+                  className={cn(
+                    "max-w-[88%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed shadow-sm",
+                    m.role === "user"
+                      ? "rounded-tr-md bg-gradient-to-br from-primary to-primary-hover text-primary-foreground"
+                      : "rounded-tl-md border border-border/60 bg-card text-foreground",
+                  )}
+                >
+                  <div className="prose prose-sm dark:prose-invert w-full max-w-none [&>p]:my-0 [&>ul]:my-1 [&_a]:underline">
+                    <ReactMarkdown
+                      components={{
+                        a: ({ href, children }) =>
+                          href?.startsWith("/") ? (
+                            <Link href={href} className="font-medium">
+                              {children}
+                            </Link>
+                          ) : (
+                            <a
+                              href={href!}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-medium"
+                            >
+                              {children}
+                            </a>
+                          ),
+                      }}
+                    >
+                      {m.parts
+                        ?.filter((p) => p.type === "text")
+                        .map((p) => p.text)
+                        .join("") || ""}
+                    </ReactMarkdown>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {isLoading &&
+              messages[messages.length - 1]?.role === "user" && (
+                <div className="flex justify-start">
+                  <div className="rounded-2xl rounded-tl-md border border-border/60 bg-card px-4 py-3 shadow-sm">
+                    <span className="flex items-center gap-1">
+                      <span
+                        className="inline-block h-1.5 w-1.5 rounded-full bg-primary animate-bounce"
+                        style={{ animationDelay: "0ms" }}
+                      />
+                      <span
+                        className="inline-block h-1.5 w-1.5 rounded-full bg-primary animate-bounce"
+                        style={{ animationDelay: "120ms" }}
+                      />
+                      <span
+                        className="inline-block h-1.5 w-1.5 rounded-full bg-primary animate-bounce"
+                        style={{ animationDelay: "240ms" }}
+                      />
+                    </span>
+                  </div>
+                </div>
+              )}
+
+            <div ref={bottomRef} />
+          </div>
+
+          {/* Input */}
+          <form
+            onSubmit={handleSubmit}
+            className="border-t border-border/60 bg-card/80 p-3 backdrop-blur-md"
           >
-            <Send size={12} />
-          </button>
-        </div>
-      </form>
-    </motion.div>
+            <div className="flex items-center gap-2 rounded-2xl border border-border bg-background/60 px-3 py-1.5 transition-all duration-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Ask anything about courts..."
+                disabled={isLoading}
+                className="flex-1 border-0 bg-transparent text-[13px] text-foreground outline-none placeholder:text-text-tertiary"
+              />
+              <button
+                type="submit"
+                disabled={isLoading || !input.trim()}
+                aria-label="Send"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent text-white shadow-[0_4px_12px_-4px_rgba(0,102,255,0.45)] transition-all duration-200 hover:shadow-[0_6px_16px_-4px_rgba(0,102,255,0.6)] active:scale-95 disabled:opacity-40 disabled:shadow-none"
+              >
+                <Send size={13} strokeWidth={2.2} />
+              </button>
+            </div>
+          </form>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

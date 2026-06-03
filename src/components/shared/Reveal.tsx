@@ -1,31 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import type { ReactNode } from "react";
 
-import {
-  blurVariants,
-  fadeUpVariants,
-  fadeVariants,
-  slideLeftVariants,
-  slideRightVariants,
-  scaleVariants,
-  ease,
-} from "@/lib/motion";
+import { revealVariantsMap, type RevealVariant } from "@/lib/motion";
 
-/* ==========================================================================
-   Variant map
-   ========================================================================== */
-const variantMap = {
-  fadeUp: fadeUpVariants,
-  fadeIn: fadeVariants,
-  slideLeft: slideLeftVariants,
-  slideRight: slideRightVariants,
-  scale: scaleVariants,
-  blur: blurVariants,
-} as const;
-
-export type RevealVariant = keyof typeof variantMap;
+export type { RevealVariant };
 
 /* ==========================================================================
    Props
@@ -61,8 +41,8 @@ export function Reveal({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, margin }}
-      variants={variantMap[variant]}
+      viewport={{ once, margin } as never}
+      variants={revealVariantsMap[variant]}
       transition={{ duration, delay: delay || undefined }}
       className={className}
     >

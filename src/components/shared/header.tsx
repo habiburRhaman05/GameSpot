@@ -1,21 +1,27 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   LayoutDashboard,
   LogOut,
   User,
   Menu,
   X,
-  Zap,
+  ArrowRight,
+  Compass,
+  Trophy,
+  Users,
+  Info,
+  Home,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
+import { LiveTicker } from "./LiveTicker";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Avatar,
@@ -30,26 +36,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
 import type { Session } from "@/lib/session";
 
 export const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "Discover", href: "/venues" },
-  { label: "Organizers", href: "/organizers" },
-  { label: "About", href: "/about" },
+  { label: "Home", href: "/", icon: Home },
+  { label: "Discover", href: "/venues", icon: Compass },
+  { label: "Organizers", href: "/organizers", icon: Users },
+  { label: "About", href: "/about", icon: Info },
 ];
 
-// ─── Magnetic link wrapper ──────────────────────────────────
+/* ==========================================================================
+   Athletic underline-slide nav link
+   ========================================================================== */
 function NavLink({
   href,
   children,
@@ -59,60 +59,37 @@ function NavLink({
   children: React.ReactNode;
   isActive: boolean;
 }) {
-  const linkRef = useRef<HTMLAnchorElement>(null);
-
-  const onMouseMove = useCallback((e: React.MouseEvent) => {
-    const el = linkRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    gsap.to(el, {
-      x: x * 0.15,
-      y: y * 0.15,
-      duration: 0.3,
-      ease: "power2.out",
-    });
-  }, []);
-
-  const onMouseLeave = useCallback(() => {
-    const el = linkRef.current;
-    if (!el) return;
-    gsap.to(el, {
-      x: 0,
-      y: 0,
-      duration: 0.3,
-      ease: "power2.out",
-    });
-  }, []);
-
   return (
     <Link
-      ref={linkRef}
       href={href}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
+      data-active={isActive}
       className={cn(
-        "group relative rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors duration-150",
+        "group/nav relative inline-flex h-9 items-center px-3 text-[12.5px] font-semibold uppercase tracking-[0.08em] outline-none transition-colors duration-200",
         isActive
           ? "text-foreground"
           : "text-text-secondary hover:text-foreground",
       )}
     >
-      {children}
-      <span
-        className={cn(
-          "absolute inset-x-1 -bottom-px h-px rounded-full bg-primary transition-all duration-200",
-          isActive
-            ? "opacity-100 scale-x-100"
-            : "opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100",
-        )}
-      />
+      <span className="relative">
+        {children}
+        {/* Underline slide-in */}
+        <span
+          aria-hidden
+          className={cn(
+            "pointer-events-none absolute -bottom-1 left-0 h-[2px] origin-left rounded-full bg-primary transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+            isActive
+              ? "w-full scale-x-100 bg-gradient-to-r from-primary via-primary to-accent shadow-[0_0_10px_var(--primary)]"
+              : "w-full scale-x-0 group-hover/nav:scale-x-100",
+          )}
+        />
+      </span>
     </Link>
   );
 }
 
-// ─── Header Component ──────────────────────────────────────
+/* ==========================================================================
+   Header
+   ========================================================================== */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -120,80 +97,32 @@ export function Header() {
   const { data: rawSession, isPending } = authClient.useSession();
   const session = rawSession as Session | null;
 
-  const headerRef = useRef<HTMLHeadingElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
-  const logoRef = useRef<HTMLDivElement>(null);
-  const navRef = useRef<HTMLDivElement>(null);
-  const actionsRef = useRef<HTMLDivElement>(null);
-
+  const headerRef = useRef<HTMLElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // ─── Scroll listener ──────────────────────────────────────
+  // Scroll listener — adds elevation when scrolled
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 16);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // ─── GSAP entrance ───────────────────────────────────────
-  useGSAP(
-    () => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-      tl.fromTo(
-        headerRef.current,
-        { y: -20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6 },
-      );
-
-      if (logoRef.current) {
-        tl.fromTo(
-          logoRef.current,
-          { x: -16, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.5 },
-          "-=0.3",
-        );
-      }
-
-      if (navRef.current) {
-        const links = navRef.current.querySelectorAll("a");
-        tl.fromTo(
-          links,
-          { y: -8, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.4,
-            stagger: 0.04,
-            ease: "power2.out",
-          },
-          "-=0.3",
-        );
-      }
-
-      if (actionsRef.current) {
-        const children = actionsRef.current.children;
-        tl.fromTo(
-          children,
-          { y: -8, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.3,
-            stagger: 0.03,
-            ease: "power2.out",
-          },
-          "-=0.2",
-        );
-      }
-    },
-    { scope: headerRef },
-  );
+  // Lock body scroll while mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   const handleSignOut = async () => {
     await authClient.signOut();
-    toast.success("Signed out successfully!");
+    toast.success("Signed out successfully");
     router.refresh();
   };
 
@@ -204,276 +133,451 @@ export function Header() {
         ? "/organizer/settings"
         : "/dashboard/profile";
 
+  const dashboardHref =
+    session?.user.role === "ADMIN"
+      ? "/admin"
+      : session?.user.role === "ORGANIZER"
+        ? "/organizer"
+        : "/dashboard";
+
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header
-      ref={headerRef}
-      className="fixed inset-x-0 top-0 z-50 w-full px-4 pt-3 sm:px-6"
-    >
-      <div
-        ref={innerRef}
-        className={cn(
-          "mx-auto flex h-12 max-w-6xl items-center justify-between rounded-xl px-4 transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] sm:h-14 sm:px-5",
-          scrolled
-            ? "border border-border-strong bg-card/80 shadow-md backdrop-blur-xl"
-            : "border border-border bg-card/40 backdrop-blur-sm",
-        )}
+    <>
+      <motion.header
+        ref={headerRef}
+        initial={{ y: -32, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed inset-x-0 top-0 z-50 w-full"
       >
-        {/* ─── Left: Logo ─────────────────────────────────── */}
-        <div ref={logoRef} className="flex items-center gap-3">
-          <Logo variant="default" hideTagline />
-          <div className="hidden h-4 w-px bg-border sm:block" />
-          <span className="hidden text-[9px] font-bold uppercase tracking-[0.2em] text-text-tertiary sm:block">
-            Elite Sports Network
-          </span>
+        {/* Live scores ticker — desktop only */}
+        <div className="hidden md:block">
+          <LiveTicker />
         </div>
 
-        {/* ─── Center: Nav ──────────────────────────────── */}
-        <div ref={navRef} className="hidden items-center gap-0.5 lg:flex">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.href}
-              href={link.href}
-              isActive={isActive(link.href)}
-            >
-              {link.label}
-            </NavLink>
-          ))}
-        </div>
+        {/* Glass nav shell */}
+        <div
+          className={cn(
+            "relative w-full px-3 pt-2.5 sm:px-5 sm:pt-3",
+            scrolled && "pt-2",
+          )}
+        >
+          <div
+            className={cn(
+              "mx-auto flex h-13 max-w-7xl items-center justify-between rounded-2xl px-3 transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] sm:h-14 sm:px-4",
+              scrolled
+                ? "border border-border-strong/60 bg-surface-glass shadow-lg backdrop-blur-2xl dark:shadow-black/20"
+                : "border border-border/60 bg-surface-glass/80 backdrop-blur-xl dark:bg-surface-glass/70",
+            )}
+          >
+            {/* Subtle inner highlight ring — theme-aware */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-border-strong/30"
+            />
 
-        {/* ─── Right: Actions ────────────────────────────── */}
-        <div ref={actionsRef} className="flex items-center gap-1.5 sm:gap-2">
-          <ThemeToggle size={32} />
-
-          {isPending ? (
-            <div className="flex gap-2">
-              <div className="hidden h-8 w-16 animate-pulse rounded-md bg-surface-2 sm:block" />
-              <div className="h-8 w-8 animate-pulse rounded-full bg-surface-2" />
+            {/* ─── Left: Logo ─── */}
+            <div className="relative flex items-center gap-3">
+              <Logo variant="default" hideTagline />
+              <div className="hidden h-4 w-px bg-border/80 md:block" />
+              <span className="hidden items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.22em] text-text-tertiary md:inline-flex">
+                <span className="inline-block h-1 w-1 rounded-full bg-accent shadow-[0_0_6px_var(--accent)]" />
+                Premium Network
+              </span>
             </div>
-          ) : session ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar
-                  className="h-8 w-8 cursor-pointer transition-all duration-150 hover:ring-2 hover:ring-primary/30 hover:ring-offset-2 hover:ring-offset-background"
-                  size="default"
+
+            {/* ─── Center: Nav (desktop) ─── */}
+            <nav
+              aria-label="Primary"
+              className="relative hidden items-center gap-1 lg:flex"
+            >
+              {navLinks.map((link) => (
+                <NavLink
+                  key={link.href}
+                  href={link.href}
+                  isActive={isActive(link.href)}
                 >
-                  <AvatarImage
-                    src={session.user.avatarUrl || session.user.image || ""}
-                    alt={session.user.name || "User"}
-                  />
-                  <AvatarFallback className="bg-primary-soft text-primary text-xs font-semibold">
-                    {session.user.name?.charAt(0).toUpperCase() || "U"}
-                  </AvatarFallback>
-                  <AvatarBadge className="bg-success border-2 border-background" />
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="w-56 border border-border bg-popover/95 p-1.5 backdrop-blur-xl"
-              >
-                <div className="mb-1 flex items-center gap-2.5 rounded-lg bg-muted/50 p-2.5">
-                  <Avatar className="h-9 w-9 border border-border">
-                    <AvatarImage
-                      src={session.user.avatarUrl || session.user.image || ""}
-                      alt={session.user.name || "User"}
-                    />
-                    <AvatarFallback className="bg-primary-soft text-primary text-xs font-semibold">
-                      {session.user.name?.charAt(0).toUpperCase() || "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col gap-0.5 overflow-hidden">
-                    <p className="truncate text-sm font-semibold text-foreground">
-                      {session.user.name}
-                    </p>
-                    <p className="truncate text-[11px] text-text-secondary">
-                      {session.user.email}
-                    </p>
-                    <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-primary/70">
-                      {session.user.role}
-                    </p>
-                  </div>
+                  {link.label}
+                </NavLink>
+              ))}
+            </nav>
+
+            {/* ─── Right: Actions ─── */}
+            <div className="relative flex items-center gap-1.5 sm:gap-2">
+              <ThemeToggle size={34} className="hidden sm:inline-flex" />
+
+              {isPending ? (
+                <div className="flex items-center gap-2">
+                  <div className="hidden h-8 w-20 animate-pulse rounded-md bg-surface-2 lg:block" />
+                  <div className="h-8 w-8 animate-pulse rounded-full bg-surface-2" />
                 </div>
-                <DropdownMenuSeparator className="my-1" />
-                <DropdownMenuItem
-                  asChild
-                  className="cursor-pointer rounded-md text-text-secondary hover:bg-surface-2 hover:text-foreground"
-                >
-                  <Link href="/dashboard" className="flex items-center gap-2">
-                    <LayoutDashboard className="h-3.5 w-3.5" />
-                    <span className="text-xs">Dashboard</span>
+              ) : session ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      className="group/avatar inline-flex items-center gap-2 rounded-full pr-1.5 pl-1 py-1 transition-all duration-200 hover:bg-surface-2/80"
+                      aria-label="Account menu"
+                    >
+                      <Avatar
+                        className="h-8 w-8 ring-2 ring-transparent transition-all duration-200 group-hover/avatar:ring-primary/30"
+                        size="default"
+                      >
+                        <AvatarImage
+                          src={session.user.avatarUrl || session.user.image || ""}
+                          alt={session.user.name || "User"}
+                        />
+                        <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-[11px] font-bold text-white">
+                          {session.user.name?.charAt(0).toUpperCase() || "U"}
+                        </AvatarFallback>
+                        <AvatarBadge className="bg-accent ring-2 ring-background" />
+                      </Avatar>
+                      <span className="hidden max-w-[7rem] truncate pr-1 text-left text-[11px] font-semibold leading-none text-foreground sm:inline-block">
+                        {session.user.name?.split(" ")[0]}
+                      </span>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    sideOffset={8}
+                    className="w-64 overflow-hidden border border-border-strong/60 bg-popover/95 p-1.5 shadow-xl backdrop-blur-2xl"
+                  >
+                    <div className="mb-1 flex items-center gap-3 rounded-lg bg-gradient-to-br from-primary-soft to-accent/10 p-3">
+                      <Avatar className="h-10 w-10 ring-2 ring-primary/30" size="lg">
+                        <AvatarImage
+                          src={session.user.avatarUrl || session.user.image || ""}
+                          alt={session.user.name || "User"}
+                        />
+                        <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-sm font-bold text-white">
+                          {session.user.name?.charAt(0).toUpperCase() || "U"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex min-w-0 flex-col gap-0.5">
+                        <p className="truncate text-[13px] font-semibold leading-tight text-foreground">
+                          {session.user.name}
+                        </p>
+                        <p className="truncate text-[10.5px] text-text-secondary">
+                          {session.user.email}
+                        </p>
+                        <span className="mt-0.5 inline-flex w-fit items-center rounded-full bg-primary/15 px-1.5 py-0.5 text-[8.5px] font-bold uppercase tracking-[0.14em] text-primary">
+                          {session.user.role}
+                        </span>
+                      </div>
+                    </div>
+                    <DropdownMenuSeparator className="my-1" />
+                    <DropdownMenuItem
+                      asChild
+                      className="cursor-pointer rounded-md px-2.5 py-2 text-text-secondary hover:bg-surface-2 hover:text-foreground"
+                    >
+                      <Link href={dashboardHref} className="flex items-center gap-2.5">
+                        <LayoutDashboard className="h-3.5 w-3.5" />
+                        <span className="text-[12.5px] font-medium">Dashboard</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      asChild
+                      className="cursor-pointer rounded-md px-2.5 py-2 text-text-secondary hover:bg-surface-2 hover:text-foreground"
+                    >
+                      <Link href={profileHref} className="flex items-center gap-2.5">
+                        <User className="h-3.5 w-3.5" />
+                        <span className="text-[12.5px] font-medium">Profile</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="my-1" />
+                    <DropdownMenuItem
+                      onClick={handleSignOut}
+                      className="cursor-pointer rounded-md px-2.5 py-2 text-destructive/85 hover:bg-destructive/10 hover:text-destructive"
+                    >
+                      <LogOut className="h-3.5 w-3.5" />
+                      <span className="text-[12.5px] font-medium">Sign Out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <div className="hidden items-center gap-1.5 lg:flex">
+                  <Link
+                    href="/signin"
+                    className={buttonVariants({
+                      variant: "ghost",
+                      size: "sm",
+                      className:
+                        "h-9 px-3 text-[12px] font-semibold uppercase tracking-[0.08em] text-text-secondary hover:text-foreground",
+                    })}
+                  >
+                    Sign In
                   </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  asChild
-                  className="cursor-pointer rounded-md text-text-secondary hover:bg-surface-2 hover:text-foreground"
-                >
-                  <Link href={profileHref} className="flex items-center gap-2">
-                    <User className="h-3.5 w-3.5" />
-                    <span className="text-xs">Profile</span>
+                  <Link
+                    href="/signup"
+                    className={buttonVariants({
+                      variant: "default",
+                      size: "sm",
+                      className:
+                        "group/cta h-9 gap-1.5 px-3.5 text-[12px] font-bold uppercase tracking-[0.08em] shadow-[0_4px_14px_-4px_rgba(0,102,255,0.45)]",
+                    })}
+                  >
+                    Get Started
+                    <ArrowRight className="h-3 w-3 transition-transform duration-200 group-hover/cta:translate-x-0.5" />
                   </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="my-1" />
-                <DropdownMenuItem
-                  className="cursor-pointer rounded-md text-destructive/80 hover:bg-destructive/10 hover:text-destructive flex items-center gap-2"
-                  onClick={handleSignOut}
-                >
-                  <LogOut className="h-3.5 w-3.5" />
-                  <span className="text-xs">Sign Out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <div className="hidden items-center gap-1.5 lg:flex">
+                </div>
+              )}
+
+              {/* Mobile hamburger trigger */}
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open menu"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 bg-surface/40 text-text-secondary transition-all duration-200 hover:border-border-strong hover:bg-surface-2 hover:text-foreground active:scale-95 lg:hidden"
+              >
+                <Menu className="h-4 w-4" strokeWidth={2.2} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.header>
+
+      {/* ─── Full-screen mobile menu overlay ─── */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <MobileMenu
+            session={session}
+            isPending={isPending}
+            onClose={() => setMobileMenuOpen(false)}
+            onSignOut={handleSignOut}
+            isActive={isActive}
+            profileHref={profileHref}
+            dashboardHref={dashboardHref}
+          />
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+/* ==========================================================================
+   Full-screen Mobile Menu — staggered athletic typography
+   ========================================================================== */
+function MobileMenu({
+  session,
+  isPending,
+  onClose,
+  onSignOut,
+  isActive,
+  profileHref,
+  dashboardHref,
+}: {
+  session: Session | null;
+  isPending: boolean;
+  onClose: () => void;
+  onSignOut: () => Promise<void>;
+  isActive: (href: string) => boolean;
+  profileHref: string;
+  dashboardHref: string;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed inset-0 z-[60] flex flex-col bg-background/95 backdrop-blur-2xl lg:hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Mobile navigation"
+    >
+      {/* Ambient gradient background */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-accent/10 blur-3xl" />
+      </div>
+
+      {/* Header */}
+      <div className="relative flex h-14 items-center justify-between border-b border-border/60 px-4">
+        <Logo variant="default" hideTagline />
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close menu"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 bg-surface/40 text-text-secondary transition-all duration-200 hover:border-border-strong hover:bg-surface-2 hover:text-foreground active:scale-95"
+        >
+          <X className="h-4 w-4" strokeWidth={2.2} />
+        </button>
+      </div>
+
+      {/* User card */}
+      {session && (
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05, duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+          className="relative mx-4 mt-4 flex items-center gap-3 rounded-2xl border border-border/60 bg-gradient-to-br from-primary-soft/60 to-accent/10 p-3.5"
+        >
+          <Avatar className="h-12 w-12 ring-2 ring-primary/30" size="lg">
+            <AvatarImage
+              src={session.user.avatarUrl || session.user.image || ""}
+              alt={session.user.name || "User"}
+            />
+            <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-base font-bold text-white">
+              {session.user.name?.charAt(0).toUpperCase() || "U"}
+            </AvatarFallback>
+            <AvatarBadge className="bg-accent ring-2 ring-background" />
+          </Avatar>
+          <div className="min-w-0 flex-1">
+            <p className="truncate font-display text-base font-bold leading-tight text-foreground">
+              {session.user.name}
+            </p>
+            <p className="truncate text-[11px] text-text-secondary">
+              {session.user.email}
+            </p>
+            <span className="mt-1 inline-flex w-fit items-center rounded-full bg-primary/15 px-2 py-0.5 text-[8.5px] font-bold uppercase tracking-[0.14em] text-primary">
+              {session.user.role}
+            </span>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Nav items — bold athletic stagger */}
+      <nav
+        aria-label="Mobile primary"
+        className="relative flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-6"
+      >
+        {navLinks.map((link, i) => {
+          const Icon = link.icon;
+          const active = isActive(link.href);
+          return (
+            <motion.div
+              key={link.href}
+              initial={{ opacity: 0, x: -16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{
+                delay: 0.08 + i * 0.06,
+                duration: 0.32,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+            >
+              <Link
+                href={link.href}
+                onClick={onClose}
+                className={cn(
+                  "group/mlink relative flex items-center justify-between rounded-xl border px-4 py-3.5 transition-all duration-200",
+                  active
+                    ? "border-primary/40 bg-primary-soft text-foreground shadow-[inset_3px_0_0_var(--primary)]"
+                    : "border-transparent text-text-secondary hover:border-border hover:bg-surface-2 hover:text-foreground",
+                )}
+              >
+                <span className="flex items-center gap-3">
+                  <span
+                    className={cn(
+                      "inline-flex h-9 w-9 items-center justify-center rounded-lg transition-colors duration-200",
+                      active
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-surface-2 text-text-secondary group-hover/mlink:bg-surface-3",
+                    )}
+                  >
+                    <Icon className="h-4 w-4" strokeWidth={2.2} />
+                  </span>
+                  <span className="font-display text-base font-bold uppercase tracking-tight">
+                    {link.label}
+                  </span>
+                </span>
+                <ArrowRight
+                  className={cn(
+                    "h-4 w-4 transition-transform duration-200",
+                    active
+                      ? "translate-x-0 text-primary"
+                      : "-translate-x-1 opacity-0 group-hover/mlink:translate-x-0 group-hover/mlink:opacity-100",
+                  )}
+                  strokeWidth={2.2}
+                />
+              </Link>
+            </motion.div>
+          );
+        })}
+
+        {session && (
+          <>
+            <div className="my-2 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+            <motion.div
+              initial={{ opacity: 0, x: -16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4, duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+              className="grid gap-1"
+            >
+              <Link
+                href={dashboardHref}
+                onClick={onClose}
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-text-secondary transition-colors duration-200 hover:bg-surface-2 hover:text-foreground"
+              >
+                <LayoutDashboard className="h-4 w-4" strokeWidth={2.2} />
+                Dashboard
+              </Link>
+              <Link
+                href={profileHref}
+                onClick={onClose}
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-text-secondary transition-colors duration-200 hover:bg-surface-2 hover:text-foreground"
+              >
+                <User className="h-4 w-4" strokeWidth={2.2} />
+                Profile
+              </Link>
+            </motion.div>
+          </>
+        )}
+      </nav>
+
+      {/* Footer actions */}
+      <div className="relative border-t border-border/60 bg-surface-glass/60 px-4 py-4 backdrop-blur-xl">
+        {isPending ? (
+          <div className="flex flex-col gap-2">
+            <div className="h-11 w-full animate-pulse rounded-xl bg-surface-2" />
+            <div className="h-11 w-full animate-pulse rounded-xl bg-surface-2" />
+          </div>
+        ) : session ? (
+          <div className="flex items-center justify-between gap-3">
+            <ThemeToggle size={40} />
+            <button
+              type="button"
+              onClick={() => {
+                onSignOut();
+                onClose();
+              }}
+              className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-destructive/30 bg-destructive/10 text-[12px] font-bold uppercase tracking-[0.1em] text-destructive transition-all duration-200 hover:bg-destructive/15 active:scale-[0.98]"
+            >
+              <LogOut className="h-3.5 w-3.5" strokeWidth={2.2} />
+              Sign Out
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2.5">
+            <div className="grid grid-cols-2 gap-2">
               <Link
                 href="/signin"
-                className={buttonVariants({
-                  variant: "ghost",
-                  size: "sm",
-                  className:
-                    "text-text-secondary hover:text-foreground h-8 text-xs",
-                })}
+                onClick={onClose}
+                className="inline-flex h-11 items-center justify-center rounded-xl border border-border bg-surface/60 text-[12px] font-bold uppercase tracking-[0.1em] text-foreground transition-all duration-200 hover:border-border-strong hover:bg-surface-2 active:scale-[0.98]"
               >
                 Sign In
               </Link>
               <Link
                 href="/signup"
-                className={buttonVariants({
-                  variant: "default",
-                  size: "sm",
-                  className: "h-8 text-xs px-3",
-                })}
+                onClick={onClose}
+                className="group/cta inline-flex h-11 items-center justify-center gap-1.5 rounded-xl bg-primary text-[12px] font-bold uppercase tracking-[0.1em] text-primary-foreground shadow-[0_8px_24px_-8px_rgba(0,102,255,0.5)] transition-all duration-200 hover:bg-primary-hover active:scale-[0.98]"
               >
-                <Zap className="h-3 w-3 mr-1" />
                 Get Started
+                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/cta:translate-x-0.5" />
               </Link>
             </div>
-          )}
-
-          {/* ─── Mobile hamburger ────────────────────────── */}
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <button
-                type="button"
-                className="flex h-8 w-8 items-center justify-center rounded-md text-text-secondary hover:text-foreground hover:bg-surface-2 lg:hidden"
-                aria-label="Toggle menu"
-              >
-                <Menu className="h-4 w-4" />
-              </button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="w-[80vw] max-w-xs border-l border-border bg-background/95 p-0 backdrop-blur-2xl sm:w-80"
-            >
-              <SheetHeader className="border-b border-border px-5 py-4 text-left">
-                <div className="flex items-center justify-between">
-                  <SheetTitle className="text-sm font-semibold text-foreground">
-                    Navigation
-                  </SheetTitle>
-                  <button
-                    type="button"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary hover:text-foreground hover:bg-surface-2"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              </SheetHeader>
-              <div className="space-y-4 px-5 pb-6 pt-4">
-                {session && (
-                  <div className="rounded-lg border border-border bg-surface-2/50 px-3 py-2.5">
-                    <p className="truncate text-sm font-semibold text-foreground">
-                      {session.user.name}
-                    </p>
-                    <p className="truncate text-[11px] text-text-secondary">
-                      {session.user.email}
-                    </p>
-                  </div>
-                )}
-                <div className="grid gap-0.5">
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={cn(
-                        "flex h-10 items-center rounded-md px-3 text-xs font-medium transition-colors duration-150",
-                        isActive(link.href)
-                          ? "bg-primary-soft text-primary"
-                          : "text-text-secondary hover:bg-surface-2 hover:text-foreground",
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-                <div className="h-px bg-border" />
-                {isPending ? (
-                  <div className="flex flex-col gap-2">
-                    <div className="h-9 w-full animate-pulse rounded-md bg-surface-2" />
-                    <div className="h-9 w-full animate-pulse rounded-md bg-surface-2" />
-                  </div>
-                ) : session ? (
-                  <div className="grid gap-0.5">
-                    <Link
-                      href="/dashboard"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex h-10 items-center gap-2 rounded-md px-3 text-xs font-medium text-text-secondary hover:bg-surface-2 hover:text-foreground transition-colors duration-150"
-                    >
-                      <LayoutDashboard className="h-3.5 w-3.5" />
-                      Dashboard
-                    </Link>
-                    <Link
-                      href={profileHref}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex h-10 items-center gap-2 rounded-md px-3 text-xs font-medium text-text-secondary hover:bg-surface-2 hover:text-foreground transition-colors duration-150"
-                    >
-                      <User className="h-3.5 w-3.5" />
-                      Profile
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        handleSignOut();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="flex h-10 items-center gap-2 rounded-md px-3 text-xs font-medium text-destructive/70 hover:bg-destructive/10 hover:text-destructive transition-colors duration-150"
-                    >
-                      <LogOut className="h-3.5 w-3.5" />
-                      Sign Out
-                    </button>
-                  </div>
-                ) : (
-                  <div className="grid gap-2">
-                    <Link
-                      href="/signin"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex h-10 items-center justify-center rounded-md border border-border text-xs font-medium text-text-secondary hover:bg-surface-2 hover:text-foreground transition-colors duration-150"
-                    >
-                      Sign In
-                    </Link>
-                    <Link
-                      href="/signup"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex h-10 items-center justify-center rounded-md bg-primary text-xs font-medium text-primary-foreground shadow-sm transition-colors duration-150 hover:bg-primary-hover"
-                    >
-                      <Zap className="h-3 w-3 mr-1" />
-                      Get Started
-                    </Link>
-                  </div>
-                )}
-                <div className="flex items-center justify-between rounded-lg border border-border px-4 py-2.5">
-                  <span className="text-xs font-medium text-foreground/70">
-                    Theme
-                  </span>
-                  <ThemeToggle size={28} />
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
+            <div className="flex items-center justify-between rounded-xl border border-border bg-surface/40 px-4 py-2">
+              <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-text-tertiary">
+                Theme
+              </span>
+              <ThemeToggle size={32} />
+            </div>
+          </div>
+        )}
       </div>
-    </header>
+    </motion.div>
   );
 }

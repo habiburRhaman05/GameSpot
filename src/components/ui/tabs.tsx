@@ -5,7 +5,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Tabs as TabsPrimitive } from "radix-ui";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 

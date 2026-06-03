@@ -76,7 +76,7 @@ function ParticleField() {
             ctx!.beginPath();
             ctx!.moveTo(particles[i].x, particles[i].y);
             ctx!.lineTo(particles[j].x, particles[j].y);
-            ctx!.strokeStyle = `rgba(124, 106, 239, ${0.04 * (1 - dist / 100)})`;
+            ctx!.strokeStyle = `rgba(59, 130, 246, ${0.05 * (1 - dist / 100)})`;
             ctx!.stroke();
           }
         }
@@ -110,7 +110,7 @@ function ParticleField() {
 
         ctx!.beginPath();
         ctx!.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx!.fillStyle = `rgba(124, 106, 239, ${p.alpha})`;
+        ctx!.fillStyle = `rgba(59, 130, 246, ${p.alpha})`;
         ctx!.fill();
       }
 
@@ -202,10 +202,9 @@ function AnimatedHeadline({ text }: { text: string }) {
               className="hero-char inline-block will-change-transform"
               style={{ transformStyle: "preserve-3d" }}
             >
-              {word === "Champions" ? (
-                <span
-                  ref={wIdx === 1 ? gradientRef : undefined}
-                  className="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent"
+              {word === "Champions" ? (                  <span
+                    ref={wIdx === 1 ? gradientRef : undefined}
+                    className="bg-gradient-to-r from-blue-300 via-cyan-300 to-emerald-300 bg-clip-text text-transparent"
                   style={{
                     backgroundSize: "200% 100%",
                     backgroundPosition: "0% 50%",
@@ -420,9 +419,9 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-br from-[#070a14] via-[#0c1020] to-[#050712]" />
 
         {/* Gradient orbs — subtle, refined */}
-        <div className="absolute -top-1/4 -left-1/4 h-[60vw] w-[60vw] rounded-full opacity-20 blur-[140px]" style={{ background: "radial-gradient(circle, rgba(124,106,239,0.25) 0%, transparent 70%)" }} />
-        <div className="absolute -bottom-1/4 -right-1/4 h-[50vw] w-[50vw] rounded-full opacity-15 blur-[120px]" style={{ background: "radial-gradient(circle, rgba(167,139,250,0.2) 0%, transparent 70%)" }} />
-        <div className="absolute top-1/3 right-1/5 h-[30vw] w-[30vw] rounded-full opacity-10 blur-[100px]" style={{ background: "radial-gradient(circle, rgba(251,138,130,0.1) 0%, transparent 70%)" }} />
+        <div className="absolute -top-1/4 -left-1/4 h-[60vw] w-[60vw] rounded-full opacity-20 blur-[140px]" style={{ background: "radial-gradient(circle, rgba(0,102,255,0.25) 0%, transparent 70%)" }} />
+        <div className="absolute -bottom-1/4 -right-1/4 h-[50vw] w-[50vw] rounded-full opacity-15 blur-[120px]" style={{ background: "radial-gradient(circle, rgba(0,210,106,0.18) 0%, transparent 70%)" }} />
+        <div className="absolute top-1/3 right-1/5 h-[30vw] w-[30vw] rounded-full opacity-10 blur-[100px]" style={{ background: "radial-gradient(circle, rgba(255,184,0,0.1) 0%, transparent 70%)" }} />
 
         {/* Grid pattern — very subtle */}
         <div
@@ -450,13 +449,13 @@ export function HeroSection() {
           {/* Badge */}
           <div
             ref={badgeRef}
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.04] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-indigo-300/70 backdrop-blur-md"
+            className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.04] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-blue-300/70 backdrop-blur-md"
           >
             <span className="relative flex h-1.5 w-1.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
             </span>
-            <Sparkles className="h-3 w-3 text-indigo-400/50" />
+            <Sparkles className="h-3 w-3 text-blue-400/50" />
             GameSpot — Elite Sports Network
           </div>
 
@@ -540,7 +539,7 @@ export function HeroSection() {
                 key={field.label}
                 className="group flex items-center gap-2.5 rounded-lg bg-white/[0.02] px-3.5 py-2.5 transition-all duration-200 focus-within:bg-white/[0.06] focus-within:ring-1 focus-within:ring-primary/40 hover:bg-white/[0.04] sm:py-3"
               >
-                <field.icon className="h-3.5 w-3.5 shrink-0 text-indigo-400/40 transition-colors duration-200 group-focus-within:text-indigo-400" />
+                <field.icon className="h-3.5 w-3.5 shrink-0 text-blue-400/40 transition-colors duration-200 group-focus-within:text-blue-400" />
                 <div className="flex flex-col gap-0.5">
                   <span className="text-[7px] font-bold uppercase tracking-[0.22em] text-white/20">
                     {field.label}
@@ -589,7 +588,7 @@ export function HeroSection() {
                   className={cn(
                     "rounded-md border px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.16em] transition-all duration-200",
                     active
-                      ? "border-primary/40 bg-primary/15 text-indigo-300"
+                      ? "border-primary/40 bg-primary/15 text-blue-300"
                       : "border-white/[0.05] text-white/20 hover:border-white/[0.15] hover:text-white/40",
                   )}
                 >
