@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import { toast } from "sonner";
-import { Camera, Save, RotateCcw } from "lucide-react";
+import { Camera, Save, RotateCcw, Activity, CalendarDays } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { organizerService } from "@/service/organizer.service";
 import { userService } from "@/service/user.service";
+import { DashboardErrorBoundary } from "./DashboardErrorBoundary";
 import { cn } from "@/lib/utils";
 import { getInitials } from "@/lib/placeholders";
 import type {
@@ -234,6 +235,7 @@ export function ProfileSettingsPage({
   const hasUnsavedChanges = profileDraft !== null || organizerDraft !== null;
 
   return (
+    <DashboardErrorBoundary fallbackTitle="Profile Error" fallbackMessage="Failed to load profile data. Please try again.">
     <div className="space-y-6">
       {/* Header with save toolbar */}
       <motion.div
@@ -463,5 +465,6 @@ export function ProfileSettingsPage({
         </div>
       </div>
     </div>
+    </DashboardErrorBoundary>
   );
 }

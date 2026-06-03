@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Save, ArrowLeft, CheckCircle, XCircle } from "lucide-react";
+import { Save, ArrowLeft, CheckCircle, XCircle, Activity, CalendarDays } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { courtService } from "@/service/court.service";
+import { DashboardErrorBoundary } from "@/components/features/dashboard/shared/DashboardErrorBoundary";
 import type { CourtStatus, UpdateCourtPayload } from "@/types/court.types";
 import { DashboardSkeleton } from "@/components/features/dashboard/shared/dashboard-skeleton";
 
@@ -59,13 +60,24 @@ export default function VenueDetailsEditorPage({ role, slug }: { role: "ORGANIZE
   const hasChanges = draft.name !== undefined || draft.type !== undefined || draft.locationLabel !== undefined || draft.description !== undefined || draft.basePrice !== undefined || draft.status !== undefined;
 
   return (
+    <DashboardErrorBoundary fallbackTitle="Venue Editor Error" fallbackMessage="Failed to load venue data. Please try again.">
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            {role === "ADMIN" ? "Venue Review" : "Edit Venue"}
-          </h1>
-          <p className="text-sm text-text-tertiary">{role === "ADMIN" ? "Review venue details and approve or reject." : "Update venue details and publication status."}</p>
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/8 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-primary">
+              <Activity className="h-2.5 w-2.5" strokeWidth={2.6} />
+              Live
+            </span>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              {role === "ADMIN" ? "Venue Review" : "Edit Venue"}
+            </h1>
+          </div>
+          <p className="text-sm text-text-secondary">{role === "ADMIN" ? "Review venue details and approve or reject." : "Update venue details and publication status."}</p>
+        </div>
+        <div className="flex items-center gap-2 text-[11px] text-text-tertiary">
+          <CalendarDays className="h-3.5 w-3.5" />
+          {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={() => router.back()}><ArrowLeft className="mr-1.5 h-4 w-4" />Back</Button>
@@ -112,5 +124,6 @@ export default function VenueDetailsEditorPage({ role, slug }: { role: "ORGANIZE
         </CardContent>
       </Card>
     </div>
+    </DashboardErrorBoundary>
   );
 }

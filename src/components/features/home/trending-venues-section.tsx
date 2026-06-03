@@ -107,7 +107,7 @@ export function TrendingVenuesSection() {
   }, [courtsQuery.data?.data]);
 
   return (
-    <section className="relative overflow-hidden bg-card px-6 py-20 md:px-10 md:py-24 lg:px-12 lg:py-28">
+    <section className="relative overflow-hidden bg-card px-6 py-16 md:px-10 md:py-20 lg:px-12 lg:py-24">
       <div className="mx-auto max-w-screen-2xl">
         <Reveal variant="fadeUp" delay={0.1}>
           <div className="mb-14 flex items-end justify-between gap-6">

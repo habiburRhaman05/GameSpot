@@ -62,15 +62,17 @@ export function DashboardStatCard({
     <Card
       ref={containerRef}
       className={cn(
-        "relative overflow-hidden rounded-xl border border-border transition-all duration-200",
+        "relative overflow-hidden rounded-xl border border-border/60 transition-all duration-300",
         "hover:-translate-y-0.5 hover:shadow-lg hover:border-border-strong",
-        accent ? "bg-gradient-to-br from-primary/5 via-card to-accent/5" : "bg-card",
+        accent
+          ? "bg-gradient-to-br from-primary/[0.04] via-card to-accent/[0.03]"
+          : "bg-card",
         className,
       )}
     >
       {/* Sparkline background */}
       {data.length > 1 && (
-        <div className="pointer-events-none absolute -bottom-4 -right-4 h-24 w-48 opacity-[0.08] dark:opacity-[0.12]">
+        <div className="pointer-events-none absolute -bottom-4 -right-4 h-24 w-48 opacity-[0.06] dark:opacity-[0.10]">
           <ChartContainer config={sparklineConfig} className="h-full w-full">
             <AreaChart data={data}>
               <Area
@@ -89,16 +91,16 @@ export function DashboardStatCard({
       <CardContent className="relative z-10 flex h-full flex-col gap-3 p-5">
         {/* Icon + Label row */}
         <div className="flex items-center justify-between">
-          <p className="text-[10px] font-label font-semibold uppercase tracking-[0.12em] text-text-tertiary">
+          <p className="text-[10px] font-label font-semibold uppercase tracking-[0.14em] text-text-tertiary">
             {label}
           </p>
           {Icon && (
             <span
               className={cn(
-                "inline-flex h-8 w-8 items-center justify-center rounded-lg border",
+                "inline-flex h-8 w-8 items-center justify-center rounded-lg border transition-colors duration-200",
                 accent
                   ? "border-accent/20 bg-accent/10 text-accent"
-                  : "border-primary/20 bg-primary/10 text-primary",
+                  : "border-primary/15 bg-primary/8 text-primary",
               )}
             >
               <Icon className="h-4 w-4" strokeWidth={2} />
@@ -114,7 +116,7 @@ export function DashboardStatCard({
           {trend && (
             <span
               className={cn(
-                "inline-flex items-center gap-0.5 text-[11px] font-medium",
+                "inline-flex items-center gap-0.5 rounded-full bg-surface-2/80 px-2 py-0.5 text-[10px] font-semibold",
                 trendColor,
               )}
             >

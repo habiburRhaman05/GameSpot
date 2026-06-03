@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, BadgeCheck, BarChart3, CircleDollarSign, Layers } from "lucide-react";
+import { AlertTriangle, BadgeCheck, BarChart3, CircleDollarSign, Layers, Activity, CalendarDays } from "lucide-react";
 
 import { DashboardStatCard } from "@/components/features/dashboard/shared/DashboardStatCard";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { adminService } from "@/service/admin.service";
+import { DashboardErrorBoundary } from "@/components/features/dashboard/shared/DashboardErrorBoundary";
 import { DashboardSkeleton } from "@/components/features/dashboard/shared/dashboard-skeleton";
 
 const money = (value: number) => `USD ${value.toFixed(2)}`;
@@ -66,29 +67,42 @@ export default function AdminReportsPage() {
   if (reportsQuery.isPending) return <DashboardSkeleton />;
 
   return (
+    <DashboardErrorBoundary fallbackTitle="Reports Error" fallbackMessage="Failed to load reports data. Please try again.">
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            Reports Intelligence
-          </h1>
-          <p className="text-sm text-text-tertiary">
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/8 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-primary">
+              <Activity className="h-2.5 w-2.5" strokeWidth={2.6} />
+              Live
+            </span>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Reports Intelligence
+            </h1>
+          </div>
+          <p className="text-sm text-text-secondary">
             Decision-grade analytics across revenue, operations, and organizer performance.
           </p>
         </div>
-        <div className="flex items-center gap-2 rounded-xl border border-border bg-card p-1.5">
-          {rangeOptions.map((option) => (
-            <Button
-              key={option.value}
-              type="button"
-              variant={rangeDays === option.value ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setRangeDays(option.value)}
-              className="px-3"
-            >
-              {option.label}
-            </Button>
-          ))}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 text-[11px] text-text-tertiary">
+            <CalendarDays className="h-3.5 w-3.5" />
+            {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
+          </div>
+          <div className="flex items-center gap-2 rounded-xl border border-border bg-card p-1.5">
+            {rangeOptions.map((option) => (
+              <Button
+                key={option.value}
+                type="button"
+                variant={rangeDays === option.value ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setRangeDays(option.value)}
+                className="px-3"
+              >
+                {option.label}
+              </Button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -248,5 +262,6 @@ export default function AdminReportsPage() {
         </div>
       )}
     </div>
+    </DashboardErrorBoundary>
   );
 }

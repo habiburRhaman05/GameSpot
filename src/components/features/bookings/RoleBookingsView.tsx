@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { BookingService } from "@/service/booking.service";
 import { courtService } from "@/service/court.service";
+import { DashboardErrorBoundary } from "@/components/features/dashboard/shared/DashboardErrorBoundary";
 import { VENUE_FALLBACK_IMAGE } from "@/lib/placeholders";
 import { cn } from "@/lib/utils";
 import type { Booking } from "@/types/booking.types";
@@ -72,6 +73,7 @@ export function RoleBookingsView({ role }: RoleBookingsViewProps) {
 
   if (role !== "USER" && !isVenueSelected) {
     return (
+    <DashboardErrorBoundary fallbackTitle="Bookings Error" fallbackMessage="Failed to load booking data. Please try again.">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-xl font-semibold tracking-tight text-foreground">Select Venue</h2>
@@ -111,10 +113,12 @@ export function RoleBookingsView({ role }: RoleBookingsViewProps) {
           })}
         </div>
       </div>
+    </DashboardErrorBoundary>
     );
   }
 
   return (
+    <DashboardErrorBoundary fallbackTitle="Bookings Error" fallbackMessage="Failed to load booking data. Please try again.">
     <div className="space-y-4">
       {role !== "USER" && (
         <div className="flex items-center justify-between">
@@ -131,5 +135,6 @@ export function RoleBookingsView({ role }: RoleBookingsViewProps) {
         onReject={role === "ORGANIZER" ? (b) => rejectMutation.mutate(b.id) : undefined}
       />
     </div>
+    </DashboardErrorBoundary>
   );
 }

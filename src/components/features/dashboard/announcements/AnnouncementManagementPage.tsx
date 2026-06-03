@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { format } from "date-fns";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Megaphone, BellRing, Building2 } from "lucide-react";
+import { Megaphone, BellRing, Building2, Activity, CalendarDays } from "lucide-react";
 import { toast } from "sonner";
 
 import { DashboardStatCard } from "@/components/features/dashboard/shared/DashboardStatCard";
@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { queryKeys } from "@/lib/query/query-keys";
+import { DashboardErrorBoundary } from "@/components/features/dashboard/shared/DashboardErrorBoundary";
 import { announcementService } from "@/service/announcement.service";
 import { courtService } from "@/service/court.service";
 import type { CourtListItem } from "@/types/court.types";
@@ -114,10 +115,23 @@ export default function AnnouncementManagementPage({ role }: { role: Role }) {
   if (isInitialLoading) return <DashboardSkeleton />;
 
   return (
+    <DashboardErrorBoundary fallbackTitle="Announcements Error" fallbackMessage="Failed to load announcements. Please try again.">
     <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Announcement Control</h1>
-        <p className="text-sm text-text-tertiary">{role === "ADMIN" ? "Create and publish announcements for the home landing page." : "Create and publish venue-specific announcements."}</p>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/8 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-primary">
+              <Activity className="h-2.5 w-2.5" strokeWidth={2.6} />
+              Live
+            </span>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Announcement Control</h1>
+          </div>
+          <p className="text-sm text-text-secondary">{role === "ADMIN" ? "Create and publish announcements for the home landing page." : "Create and publish venue-specific announcements."}</p>
+        </div>
+        <div className="flex items-center gap-2 text-[11px] text-text-tertiary">
+          <CalendarDays className="h-3.5 w-3.5" />
+          {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -209,5 +223,6 @@ export default function AnnouncementManagementPage({ role }: { role: Role }) {
         </CardContent>
       </Card>
     </div>
+    </DashboardErrorBoundary>
   );
 }

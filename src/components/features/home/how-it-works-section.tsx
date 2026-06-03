@@ -26,7 +26,7 @@ const cardVariants = {
 
 export function HowItWorksSection() {
   return (
-    <section className="bg-surface px-6 py-20 md:px-10 md:py-24 lg:px-12 lg:py-28">
+    <section className="bg-surface px-6 py-16 md:px-10 md:py-20 lg:px-12 lg:py-24">
       <div className="mx-auto flex w-full max-w-screen-2xl flex-col gap-10 md:gap-12 lg:gap-14">
         <Reveal variant="fadeUp" delay={0.1}>
           <div className="text-center lg:text-left">

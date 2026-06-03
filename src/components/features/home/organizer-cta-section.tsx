@@ -41,7 +41,7 @@ export function OrganizerCtaSection() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-card px-6 py-20 md:py-24 lg:py-28">
+    <section className="relative overflow-hidden bg-card px-6 py-16 md:py-20 lg:py-24">
       {/* Background decoration */}
       <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-primary/[0.03] blur-3xl" />
 

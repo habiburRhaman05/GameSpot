@@ -79,7 +79,7 @@ export function FeaturedSpotlightSection() {
   }, [courtsQuery.data?.data]);
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/95 px-5 py-18 text-primary-foreground sm:px-6 md:px-10 md:py-24 lg:px-12 lg:py-28">
+    <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/95 px-5 py-16 text-primary-foreground sm:px-6 md:px-10 md:py-20 lg:px-12 lg:py-24">
       {/* Decorative elements */}
       <div className="pointer-events-none absolute -top-40 -right-40 h-96 w-96 rounded-full bg-accent/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-accent/5 blur-3xl" />

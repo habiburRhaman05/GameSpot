@@ -34,7 +34,7 @@ function StarRating({ rating = 5 }: { rating?: number }) {
 
 export function TestimonialsMarqueeDemo2() {
   return (
-    <section className="bg-background py-20 md:py-24 lg:py-28">
+    <section className="bg-background py-16 md:py-20 lg:py-24">
       <div className="mx-auto w-full px-6 md:px-10 lg:px-12">
         <Reveal variant="fadeUp" delay={0.1}>
           <div className="mb-14 text-center lg:text-left">

@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useQuery } from "@tanstack/react-query";
-import { CalendarCheck2, CircleDollarSign, Clock3, Trophy } from "lucide-react";
+import { CalendarCheck2, CircleDollarSign, Clock3, Trophy, Activity, CalendarDays } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -18,6 +18,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { DashboardStatCard } from "@/components/features/dashboard/shared/DashboardStatCard";
 import { DashboardSkeleton } from "@/components/features/dashboard/shared/dashboard-skeleton";
+import { DashboardErrorBoundary } from "@/components/features/dashboard/shared/DashboardErrorBoundary";
 import { BookingService } from "@/service/booking.service";
 import { VENUE_FALLBACK_IMAGE } from "@/lib/placeholders";
 import { cn } from "@/lib/utils";
@@ -98,108 +99,137 @@ export default function UserDashboardOverview() {
   if (bookingsQuery.isPending) return <DashboardSkeleton />;
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-          My Dashboard
-        </h1>
-        <p className="text-sm text-text-tertiary">
-          Personal booking insights and real-time activity snapshots.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <DashboardStatCard
-          label="Total Bookings"
-          value={totalBookings}
-          icon={CalendarCheck2}
-          subtitle="All-time booking count"
-          sparklineData={trendData.map((d) => ({ value: d.bookings }))}
-        />
-        <DashboardStatCard
-          label="Active"
-          value={activeBookings}
-          icon={Clock3}
-          subtitle="Pending & paid reservations"
-        />
-        <DashboardStatCard
-          label="Completed"
-          value={completedBookings}
-          icon={Trophy}
-          subtitle={`${completionPercent}% completion rate`}
-          trend={totalBookings > 0 ? { direction: "up", percent: completionPercent } : undefined}
-        />
-        <DashboardStatCard
-          label="Total Spent"
-          value={totalSpent}
-          icon={CircleDollarSign}
-          subtitle="From paid & completed bookings"
-          accent
-        />
-      </div>
-
-      <UserDashboardCharts
-        trendData={trendData}
-        completionPercent={completionPercent}
-      />
-
-      <Card className="rounded-xl border border-border bg-card">
-        <CardHeader>
-          <CardTitle className="font-label text-base font-semibold text-foreground">
-            Recent Bookings
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <Table className="min-w-[560px]">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Venue</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {recentBookings.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center text-text-tertiary py-8">
-                      No recent bookings found.
-                    </TableCell>
-                  </TableRow>
-                )}
-                {recentBookings.map((booking) => (
-                  <TableRow key={booking.id}>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <div className="relative h-10 w-14 overflow-hidden rounded-lg border border-border/60">
-                          <Image
-                            src={getVenueImage(booking)}
-                            alt={getVenueName(booking)}
-                            fill
-                            className="object-cover"
-                            sizes="56px"
-                          />
-                        </div>
-                        <span className="font-medium text-foreground">{getVenueName(booking)}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-text-tertiary">
-                      {new Date(booking.bookingDate).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={statusVariant(booking.status) as any}>{booking.status}</Badge>
-                    </TableCell>
-                    <TableCell className={cn("text-right font-medium text-foreground")}>
-                      {formatMoney(Number(booking.totalAmount || 0))}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+    <DashboardErrorBoundary fallbackTitle="Dashboard Error" fallbackMessage="Failed to load your dashboard data. Please try again.">
+      <div className="space-y-6">
+        {/* ── Page header ── */}
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2.5">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/8 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-primary">
+                <Activity className="h-2.5 w-2.5" strokeWidth={2.6} />
+                Live
+              </span>
+              <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                My Dashboard
+              </h1>
+            </div>
+            <p className="text-sm text-text-secondary">
+              Personal booking insights and real-time activity snapshots.
+            </p>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+          <div className="flex items-center gap-2 text-[11px] text-text-tertiary">
+            <CalendarDays className="h-3.5 w-3.5" />
+            {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
+          </div>
+        </div>
+
+        {/* ── Stat cards ── */}
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          <DashboardStatCard
+            label="Total Bookings"
+            value={totalBookings}
+            icon={CalendarCheck2}
+            subtitle="All-time booking count"
+            sparklineData={trendData.map((d) => ({ value: d.bookings }))}
+          />
+          <DashboardStatCard
+            label="Active"
+            value={activeBookings}
+            icon={Clock3}
+            subtitle="Pending & paid reservations"
+          />
+          <DashboardStatCard
+            label="Completed"
+            value={completedBookings}
+            icon={Trophy}
+            subtitle={`${completionPercent}% completion rate`}
+            trend={totalBookings > 0 ? { direction: "up", percent: completionPercent } : undefined}
+          />
+          <DashboardStatCard
+            label="Total Spent"
+            value={totalSpent}
+            icon={CircleDollarSign}
+            subtitle="From paid & completed bookings"
+            accent
+          />
+        </div>
+
+        {/* ── Charts ── */}
+        <UserDashboardCharts
+          trendData={trendData}
+          completionPercent={completionPercent}
+        />
+
+        {/* ── Recent Bookings ── */}
+        <Card className="rounded-xl border border-border/60 bg-card">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="font-label text-base font-semibold text-foreground">
+                  Recent Bookings
+                </CardTitle>
+                <p className="mt-0.5 text-[11px] text-text-tertiary">
+                  Your latest booking activity
+                </p>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <Table className="min-w-[560px]">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Venue</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {recentBookings.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center text-text-tertiary py-12">
+                        <div className="flex flex-col items-center gap-2">
+                          <CalendarCheck2 className="h-8 w-8 text-text-tertiary/40" />
+                          <p className="text-sm">No bookings yet.</p>
+                          <p className="text-xs text-text-tertiary">Start exploring venues to make your first booking!</p>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                  {recentBookings.map((booking) => (
+                    <TableRow key={booking.id}>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <div className="relative h-10 w-14 overflow-hidden rounded-lg border border-border/60">
+                            <Image
+                              src={getVenueImage(booking)}
+                              alt={getVenueName(booking)}
+                              fill
+                              className="object-cover"
+                              sizes="56px"
+                            />
+                          </div>
+                          <span className="font-medium text-foreground">{getVenueName(booking)}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-text-tertiary">
+                        {new Date(booking.bookingDate).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={statusVariant(booking.status) as any}>{booking.status}</Badge>
+                      </TableCell>
+                      <TableCell className={cn("text-right font-medium text-foreground")}>
+                        {formatMoney(Number(booking.totalAmount || 0))}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </DashboardErrorBoundary>
   );
 }

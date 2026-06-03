@@ -18,45 +18,31 @@ export function HomeSections() {
       </div>
 
       <Reveal variant="fadeUp" delay={0.1}>
-        <div className="pt-16 md:pt-20 lg:pt-24">
-          <HowItWorksSection />
-        </div>
+        <HowItWorksSection />
       </Reveal>
 
       <Reveal variant="fadeUp" delay={0.1}>
-        <div className="pt-16 md:pt-20 lg:pt-24">
-          <FeaturedSpotlightSection />
-        </div>
+        <FeaturedSpotlightSection />
       </Reveal>
 
       <Reveal variant="fadeUp" delay={0.1}>
-        <div className="pt-16 md:pt-20 lg:pt-24">
-          <TrendingVenuesSection />
-        </div>
+        <TrendingVenuesSection />
       </Reveal>
 
       <Reveal variant="fadeUp" delay={0.1}>
-        <div className="pt-16 md:pt-20 lg:pt-24">
-          <GlobalPresenceSection />
-        </div>
+        <GlobalPresenceSection />
       </Reveal>
 
       <Reveal variant="fadeUp" delay={0.1}>
-        <div className="pt-16 md:pt-20 lg:pt-24">
-          <TestimonialsSection />
-        </div>
+        <TestimonialsSection />
       </Reveal>
 
       <Reveal variant="fadeUp" delay={0.1}>
-        <div className="pt-16 md:pt-20 lg:pt-24">
-          <DiscountSection />
-        </div>
+        <DiscountSection />
       </Reveal>
 
       <Reveal variant="fadeUp" delay={0.1}>
-        <div className="pt-16 md:pt-20 lg:pt-24">
-          <OrganizerCtaSection />
-        </div>
+        <OrganizerCtaSection />
       </Reveal>
     </main>
   );

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Activity, CalendarDays } from "lucide-react";
 import { toast } from "sonner";
 
 import { DashboardSkeleton } from "@/components/features/dashboard/shared/dashboard-skeleton";
@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { courtService } from "@/service/court.service";
 import { scheduleService } from "@/service/schedule.service";
+import { DashboardErrorBoundary } from "@/components/features/dashboard/shared/DashboardErrorBoundary";
 import type { CourtListItem } from "@/types/court.types";
 import type { SlotTemplate, SlotTemplatesByDay } from "@/types/schedule.types";
 import { cn } from "@/lib/utils";
@@ -99,10 +100,23 @@ export default function ScheduleManagementPage() {
   if (courtsQuery.isPending) return <DashboardSkeleton />;
 
   return (
+    <DashboardErrorBoundary fallbackTitle="Schedule Error" fallbackMessage="Failed to load schedule data. Please try again.">
     <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Schedule Templates</h1>
-        <p className="text-sm text-text-tertiary">Manage weekly slot templates per venue.</p>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/8 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-primary">
+              <Activity className="h-2.5 w-2.5" strokeWidth={2.6} />
+              Live
+            </span>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Schedule Templates</h1>
+          </div>
+          <p className="text-sm text-text-secondary">Manage weekly slot templates per venue.</p>
+        </div>
+        <div className="flex items-center gap-2 text-[11px] text-text-tertiary">
+          <CalendarDays className="h-3.5 w-3.5" />
+          {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
+        </div>
       </div>
 
       <Card className="rounded-xl border border-border bg-card">
@@ -204,5 +218,6 @@ export default function ScheduleManagementPage() {
         </>
       )}
     </div>
+    </DashboardErrorBoundary>
   );
 }

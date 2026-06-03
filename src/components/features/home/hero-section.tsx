@@ -1,6 +1,10 @@
 "use client";
 
+<<<<<<< Updated upstream
 import { useRef, useState, useMemo, useCallback, useEffect, type SyntheticEvent } from "react";
+=======
+import { useRef, useState, useMemo, type SyntheticEvent } from "react";
+>>>>>>> Stashed changes
 import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -238,8 +242,12 @@ function StatsBar() {
         numbers,
         { textContent: 0 },
         {
+<<<<<<< Updated upstream
           textContent: (_i: number) =>
             [500, 24, 50][_i],
+=======
+          textContent: (_i: number) => [2400, 120, 85][_i],
+>>>>>>> Stashed changes
           duration: 2,
           delay: 2,
           ease: "power2.out",
@@ -256,6 +264,7 @@ function StatsBar() {
   );
 
   return (
+<<<<<<< Updated upstream
     <div
       ref={ref}
       className="mt-8 flex flex-wrap items-center gap-8 sm:gap-12"
@@ -267,9 +276,21 @@ function StatsBar() {
       ].map((stat) => (
         <div key={stat.label} className="flex flex-col">
           <span className="font-display text-3xl font-black tracking-tight text-white sm:text-4xl">
+=======
+    <div ref={ref} className="mt-6 flex items-center gap-6 sm:gap-8">
+      {[
+        { label: "Venues", end: 2400, suffix: "+" },
+        { label: "Cities", end: 120, suffix: "" },
+        { label: "Athletes", end: 85, suffix: "K" },
+      ].map((stat) => (
+        <div
+          key={stat.label}
+          className="flex flex-col border-l border-white/[0.08] pl-6 first:border-0 first:pl-0"
+        >
+          <span className="font-display text-2xl font-black tracking-tight text-white sm:text-3xl">
+>>>>>>> Stashed changes
             <span data-stat>{stat.end}</span>
-            {stat.value.includes("+") && "+"}
-            {stat.value.includes("K") && "K"}
+            {stat.suffix}
           </span>
           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/30">
             {stat.label}
@@ -281,7 +302,11 @@ function StatsBar() {
 }
 
 // ═══════════════════════════════════════════════════════════════
+<<<<<<< Updated upstream
 //  HERO SECTION — premium redesign
+=======
+//  HERO SECTION — centered, single-column premium layout
+>>>>>>> Stashed changes
 // ═══════════════════════════════════════════════════════════════
 export function HeroSection() {
   const router = useRouter();
@@ -317,17 +342,31 @@ export function HeroSection() {
         },
       });
 
+<<<<<<< Updated upstream
+=======
+      // Content fade wrapper
+      gsap.fromTo(
+        contentRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3, delay: 0 },
+      );
+
+>>>>>>> Stashed changes
       // Badge entrance
       if (badgeRef.current) {
         gsap.fromTo(
           badgeRef.current,
-          { x: -20, opacity: 0, scale: 0.9 },
+          { y: 20, opacity: 0, scale: 0.9 },
           {
-            x: 0,
+            y: 0,
             opacity: 1,
             scale: 1,
             duration: 0.7,
+<<<<<<< Updated upstream
             delay: 0.1,
+=======
+            delay: 0.15,
+>>>>>>> Stashed changes
             ease: "back.out(1.7)",
           },
         );
@@ -361,7 +400,11 @@ export function HeroSection() {
             scale: 1,
             duration: 0.6,
             stagger: 0.1,
+<<<<<<< Updated upstream
             delay: 1.4,
+=======
+            delay: 1.3,
+>>>>>>> Stashed changes
             ease: "back.out(1.7)",
           },
         );
@@ -377,7 +420,11 @@ export function HeroSection() {
             opacity: 1,
             scale: 1,
             duration: 1,
+<<<<<<< Updated upstream
             delay: 1.8,
+=======
+            delay: 1.7,
+>>>>>>> Stashed changes
             ease: "power3.out",
           },
         );
@@ -412,17 +459,39 @@ export function HeroSection() {
       className="relative flex min-h-screen items-center overflow-hidden bg-[#06080f]"
     >
       {/* ═══════ BACKGROUND ═══════ */}
-      <div
-        ref={bgRef}
-        className="absolute inset-0 will-change-transform"
-      >
+      <div ref={bgRef} className="absolute inset-0 will-change-transform">
         {/* Base gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#070a14] via-[#0c1020] to-[#050712]" />
 
+<<<<<<< Updated upstream
         {/* Gradient orbs — subtle, refined */}
         <div className="absolute -top-1/4 -left-1/4 h-[60vw] w-[60vw] rounded-full opacity-20 blur-[140px]" style={{ background: "radial-gradient(circle, rgba(124,106,239,0.25) 0%, transparent 70%)" }} />
         <div className="absolute -bottom-1/4 -right-1/4 h-[50vw] w-[50vw] rounded-full opacity-15 blur-[120px]" style={{ background: "radial-gradient(circle, rgba(167,139,250,0.2) 0%, transparent 70%)" }} />
         <div className="absolute top-1/3 right-1/5 h-[30vw] w-[30vw] rounded-full opacity-10 blur-[100px]" style={{ background: "radial-gradient(circle, rgba(251,138,130,0.1) 0%, transparent 70%)" }} />
+=======
+        {/* Gradient orbs — centered for single-column feel */}
+        <div
+          className="absolute left-1/2 top-[15%] h-[50vw] w-[50vw] -translate-x-1/2 rounded-full opacity-20 blur-[140px]"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(0,102,255,0.3) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute bottom-[10%] left-[20%] h-[35vw] w-[35vw] rounded-full opacity-15 blur-[120px]"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(0,210,106,0.2) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute right-[25%] top-[40%] h-[25vw] w-[25vw] rounded-full opacity-10 blur-[100px]"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(255,184,0,0.12) 0%, transparent 70%)",
+          }}
+        />
+>>>>>>> Stashed changes
 
         {/* Grid pattern — very subtle */}
         <div
@@ -438,25 +507,41 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-t from-[#06080f] via-transparent to-[#06080f]/30" />
       </div>
 
+<<<<<<< Updated upstream
       {/* ═══════ PARTICLES ═══════ */}
       <ParticleField />
 
       {/* ═══════ CONTENT ═══════ */}
+=======
+      {/* ═══════ CONTENT — centered single column ═══════ */}
+>>>>>>> Stashed changes
       <div
         ref={contentRef}
         className="relative z-10 mx-auto w-full max-w-screen-2xl px-5 pt-28 md:px-10 md:pt-36 lg:px-16"
       >
+<<<<<<< Updated upstream
         <div className="mx-auto max-w-4xl">
           {/* Badge */}
           <div
             ref={badgeRef}
             className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.04] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-indigo-300/70 backdrop-blur-md"
+=======
+        <div className="mx-auto max-w-3xl">
+          {/* Badge */}
+          <div
+            ref={badgeRef}
+            className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.04] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-blue-300/70 backdrop-blur-md"
+>>>>>>> Stashed changes
           >
             <span className="relative flex h-1.5 w-1.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
             </span>
+<<<<<<< Updated upstream
             <Sparkles className="h-3 w-3 text-indigo-400/50" />
+=======
+            <Sparkles className="h-3 w-3 text-blue-400/50" />
+>>>>>>> Stashed changes
             GameSpot — Elite Sports Network
           </div>
 
@@ -473,26 +558,42 @@ export function HeroSection() {
           </p>
 
           {/* CTAs */}
+<<<<<<< Updated upstream
           <div
             ref={ctaRef}
             className="mt-8 flex flex-wrap items-center gap-3"
           >
+=======
+          <div ref={ctaRef} className="mt-8 flex flex-wrap items-center gap-3">
+>>>>>>> Stashed changes
             <button
               data-hero-cta
               type="button"
               onClick={() => router.push("/venues")}
+<<<<<<< Updated upstream
               className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-primary-hover hover:shadow-md hover:scale-[1.02] active:scale-100"
+=======
+              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:bg-primary-hover hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.03] active:scale-100"
+>>>>>>> Stashed changes
             >
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
               <Search className="h-4 w-4" />
               Explore Courts
+<<<<<<< Updated upstream
               <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+=======
+              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+>>>>>>> Stashed changes
             </button>
             <button
               data-hero-cta
               type="button"
               onClick={() => router.push("/organizers")}
+<<<<<<< Updated upstream
               className="group inline-flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-6 py-3 text-sm font-medium text-white/60 backdrop-blur-sm transition-all duration-200 hover:bg-white/[0.06] hover:text-white/80 hover:border-white/[0.12] hover:scale-[1.02] active:scale-100"
+=======
+              className="group inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-6 py-3 text-sm font-medium text-white/50 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] hover:text-white/70 hover:border-white/[0.14] hover:scale-[1.03] active:scale-100"
+>>>>>>> Stashed changes
             >
               Join as Partner
             </button>
@@ -506,7 +607,11 @@ export function HeroSection() {
         <form
           ref={searchRef}
           onSubmit={submitSearch}
+<<<<<<< Updated upstream
           className="mx-auto mt-10 max-w-3xl rounded-xl border border-white/[0.04] bg-white/[0.02] p-1.5 backdrop-blur-xl sm:mt-14"
+=======
+          className="mx-auto mt-10 max-w-3xl rounded-2xl border border-white/[0.05] bg-white/[0.02] p-1.5 backdrop-blur-xl sm:mt-12"
+>>>>>>> Stashed changes
         >
           <div className="grid gap-1.5 sm:grid-cols-[1fr_1fr_1fr_auto]">
             {[
@@ -538,9 +643,15 @@ export function HeroSection() {
             ].map((field) => (
               <label
                 key={field.label}
+<<<<<<< Updated upstream
                 className="group flex items-center gap-2.5 rounded-lg bg-white/[0.02] px-3.5 py-2.5 transition-all duration-200 focus-within:bg-white/[0.06] focus-within:ring-1 focus-within:ring-primary/40 hover:bg-white/[0.04] sm:py-3"
               >
                 <field.icon className="h-3.5 w-3.5 shrink-0 text-indigo-400/40 transition-colors duration-200 group-focus-within:text-indigo-400" />
+=======
+                className="group flex items-center gap-2.5 rounded-xl bg-white/[0.02] px-3.5 py-2.5 transition-all duration-200 focus-within:bg-white/[0.06] focus-within:ring-1 focus-within:ring-primary/40 hover:bg-white/[0.04] sm:py-3"
+              >
+                <field.icon className="h-3.5 w-3.5 shrink-0 text-blue-400/40 transition-colors duration-200 group-focus-within:text-blue-400" />
+>>>>>>> Stashed changes
                 <div className="flex flex-col gap-0.5">
                   <span className="text-[7px] font-bold uppercase tracking-[0.22em] text-white/20">
                     {field.label}
@@ -548,9 +659,13 @@ export function HeroSection() {
                   <input
                     value={field.value}
                     onChange={(e) => field.set(e.target.value)}
+<<<<<<< Updated upstream
                     {...(field.inputList
                       ? { list: field.inputList }
                       : {})}
+=======
+                    {...(field.inputList ? { list: field.inputList } : {})}
+>>>>>>> Stashed changes
                     {...(field.type === "date"
                       ? { type: "date", min: field.min }
                       : { type: "text" })}
@@ -563,7 +678,11 @@ export function HeroSection() {
 
             <button
               type="submit"
+<<<<<<< Updated upstream
               className="flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:bg-primary-hover hover:shadow-md hover:scale-[1.02] active:scale-100 sm:py-0"
+=======
+              className="flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-xs font-semibold text-white shadow-sm shadow-primary/20 transition-all duration-300 hover:bg-primary-hover hover:shadow-md hover:scale-[1.02] active:scale-100 sm:py-0"
+>>>>>>> Stashed changes
               aria-label="Search venues"
             >
               <Search className="h-3.5 w-3.5" />
@@ -587,9 +706,15 @@ export function HeroSection() {
                   type="button"
                   onClick={() => setSport(active ? "" : item)}
                   className={cn(
+<<<<<<< Updated upstream
                     "rounded-md border px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.16em] transition-all duration-200",
                     active
                       ? "border-primary/40 bg-primary/15 text-indigo-300"
+=======
+                    "rounded-lg border px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.16em] transition-all duration-200",
+                    active
+                      ? "border-primary/40 bg-primary/15 text-blue-300"
+>>>>>>> Stashed changes
                       : "border-white/[0.05] text-white/20 hover:border-white/[0.15] hover:text-white/40",
                   )}
                 >

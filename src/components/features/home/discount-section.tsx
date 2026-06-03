@@ -18,7 +18,7 @@ export function DiscountSection() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/95 py-20 lg:py-32 px-6 sm:px-8 lg:px-12">
+    <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/95 py-16 lg:py-24 px-6 sm:px-8 lg:px-12">
       {/* Decorative grid pattern */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -33,7 +33,7 @@ export function DiscountSection() {
       <div className="pointer-events-none absolute -top-40 -left-40 h-96 w-96 rounded-full bg-accent/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-accent/5 blur-3xl" />
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center relative z-10">
+      <div className="max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center relative z-10">
         {/* Left Column */}
         <Reveal variant="slideLeft" delay={0.1}>
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left space-y-6">

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { UserCheck, Users, UserRoundPlus } from "lucide-react";
+import { UserCheck, Users, UserRoundPlus, Activity, CalendarDays } from "lucide-react";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +22,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { DashboardStatCard } from "@/components/features/dashboard/shared/DashboardStatCard";
 import { DashboardSkeleton } from "@/components/features/dashboard/shared/dashboard-skeleton";
 import { adminService } from "@/service/admin.service";
+import { DashboardErrorBoundary } from "@/components/features/dashboard/shared/DashboardErrorBoundary";
 import type { AdminUser } from "@/types/admin.types";
 import { getInitials, AVATAR_FALLBACK_IMAGE } from "@/lib/placeholders";
 
@@ -65,12 +66,25 @@ export default function OrganizerManagementTable() {
   if (usersQuery.isPending) return <DashboardSkeleton />;
 
   return (
+    <DashboardErrorBoundary fallbackTitle="Organizer Management Error" fallbackMessage="Failed to load organizer data. Please try again.">
     <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-          Organizer Management
-        </h1>
-        <p className="text-sm text-text-tertiary">Manage organizer verification and role transitions.</p>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/8 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-primary">
+              <Activity className="h-2.5 w-2.5" strokeWidth={2.6} />
+              Live
+            </span>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Organizer Management
+            </h1>
+          </div>
+          <p className="text-sm text-text-secondary">Manage organizer verification and role transitions.</p>
+        </div>
+        <div className="flex items-center gap-2 text-[11px] text-text-tertiary">
+          <CalendarDays className="h-3.5 w-3.5" />
+          {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -156,5 +170,6 @@ export default function OrganizerManagementTable() {
         </CardContent>
       </Card>
     </div>
+    </DashboardErrorBoundary>
   );
 }

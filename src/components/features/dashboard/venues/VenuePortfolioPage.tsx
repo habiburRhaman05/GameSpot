@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Eye, Pencil, Plus, Trash2, LayoutGrid, Gauge } from "lucide-react";
+import { Eye, Pencil, Plus, Trash2, LayoutGrid, Gauge, Activity } from "lucide-react";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { DashboardStatCard } from "@/components/features/dashboard/shared/DashboardStatCard";
 import { DashboardSkeleton } from "@/components/features/dashboard/shared/dashboard-skeleton";
 import { courtService } from "@/service/court.service";
+import { DashboardErrorBoundary } from "@/components/features/dashboard/shared/DashboardErrorBoundary";
 import { cn } from "@/lib/utils";
 import { VENUE_FALLBACK_IMAGE } from "@/lib/placeholders";
 
@@ -53,11 +54,18 @@ export default function VenuePortfolioPage({ role }: { role: "ORGANIZER" | "ADMI
   if (venuesQuery.isPending) return <DashboardSkeleton />;
 
   return (
+    <DashboardErrorBoundary fallbackTitle="Venue Portfolio Error" fallbackMessage="Failed to load venue data. Please try again.">
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_480px] lg:items-start">
         <div className="space-y-1">
-          <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Venue Portfolio</h1>
-          <p className="text-sm text-text-tertiary">
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/8 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-primary">
+              <Activity className="h-2.5 w-2.5" strokeWidth={2.6} />
+              Live
+            </span>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Venue Portfolio</h1>
+          </div>
+          <p className="text-sm text-text-secondary">
             {role === "ADMIN" ? "Review organizer venues and decide approval status." : "Manage your venue portfolio."}
           </p>
         </div>
@@ -126,5 +134,6 @@ export default function VenuePortfolioPage({ role }: { role: "ORGANIZER" | "ADMI
         )}
       </div>
     </div>
+    </DashboardErrorBoundary>
   );
 }
