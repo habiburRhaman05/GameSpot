@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
 import { courtService } from "@/service/court.service";
 import { scheduleService } from "@/service/schedule.service";
 import type { CourtListItem } from "@/types/court.types";
@@ -136,9 +137,9 @@ export default function ScheduleManagementPage() {
             <CardHeader><CardTitle className="font-label text-base font-semibold text-foreground">Add Slot</CardTitle></CardHeader>
             <CardContent className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
               <div className="space-y-1"><Label className="text-[10px] font-semibold uppercase tracking-wider">Day</Label>
-                <select value={draftDay} onChange={(e) => setDraftDay(Number(e.target.value))} className="h-10 w-full rounded-lg border border-input bg-background px-3 text-sm">
+                <Select value={draftDay} onChange={(e) => setDraftDay(Number(e.target.value))}>
                   {DAYS.map((d) => <option key={d.value} value={d.value}>{d.full}</option>)}
-                </select>
+                </Select>
               </div>
               <div className="space-y-1"><Label className="text-[10px] font-semibold uppercase tracking-wider">Start</Label><Input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} /></div>
               <div className="space-y-1"><Label className="text-[10px] font-semibold uppercase tracking-wider">End</Label><Input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} /></div>

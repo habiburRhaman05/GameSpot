@@ -5,13 +5,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, MapPin, CalendarClock } from "lucide-react";
+import { ArrowRight, MapPin, CalendarClock, Activity, CalendarDays } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { BookingService } from "@/service/booking.service";
 import { courtService } from "@/service/court.service";
+import { DashboardErrorBoundary } from "@/components/features/dashboard/shared/DashboardErrorBoundary";
 import { VENUE_FALLBACK_IMAGE } from "@/lib/placeholders";
 import { cn } from "@/lib/utils";
 import type { Booking } from "@/types/booking.types";
@@ -24,8 +25,6 @@ export function RoleBookingsView({ role }: RoleBookingsViewProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [selectedCourtId, setSelectedCourtId] = useState("");
-
-  const heading = role === "ADMIN" ? "Booking Management" : role === "ORGANIZER" ? "Venue Bookings" : "My Bookings";
 
   const courtsQuery = useQuery<CourtListItem[]>({
     queryKey: ["bookings-courts", role],
@@ -72,11 +71,27 @@ export function RoleBookingsView({ role }: RoleBookingsViewProps) {
 
   if (role !== "USER" && !isVenueSelected) {
     return (
+    <DashboardErrorBoundary fallbackTitle="Bookings Error" fallbackMessage="Failed to load booking data. Please try again.">
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="font-display text-xl font-semibold tracking-tight text-foreground">Select Venue</h2>
-          <p className="text-xs text-text-tertiary">{courts.length} venues</p>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/8 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-primary">
+              <Activity className="h-2.5 w-2.5" strokeWidth={2.6} />
+              Live
+            </span>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Select Venue
+            </h1>
+          </div>            <p className="text-sm text-text-secondary">
+            Choose a venue to manage its bookings. {courts.length} venue{courts.length !== 1 ? 's' : ''} available.
+          </p>
         </div>
+        <div className="flex items-center gap-2 text-[11px] text-text-tertiary">
+          <CalendarDays className="h-3.5 w-3.5" />
+          {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
+        </div>
+      </div>
         {courts.length === 0 && !loading && (
           <Card className="rounded-xl border border-border bg-card"><CardContent className="p-6 text-sm text-text-tertiary">No venues found. Create a venue first.</CardContent></Card>
         )}
@@ -111,19 +126,40 @@ export function RoleBookingsView({ role }: RoleBookingsViewProps) {
           })}
         </div>
       </div>
+    </DashboardErrorBoundary>
     );
   }
 
   return (
+    <DashboardErrorBoundary fallbackTitle="Bookings Error" fallbackMessage="Failed to load booking data. Please try again.">
     <div className="space-y-4">
-      {role !== "USER" && (
-        <div className="flex items-center justify-between">
-          <h2 className="font-display text-xl font-semibold tracking-tight text-foreground">Bookings for {courts.find((c) => c.id === effectiveCourtId)?.name ?? "Venue"}</h2>
-          <Button variant="outline" size="sm" onClick={() => setSelectedCourtId("")}>Change Venue</Button>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/8 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-primary">
+              <Activity className="h-2.5 w-2.5" strokeWidth={2.6} />
+              Live
+            </span>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              {role !== "USER" ? `Bookings for ${courts.find((c) => c.id === effectiveCourtId)?.name ?? "Venue"}` : "My Bookings"}
+            </h1>
+          </div>
+          <p className="text-sm text-text-secondary">
+            {role === "ADMIN" ? "Manage and review all booking activity." : role === "ORGANIZER" ? "Review bookings for your selected venue." : "Your personal booking history and status."}
+          </p>
         </div>
-      )}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 text-[11px] text-text-tertiary">
+            <CalendarDays className="h-3.5 w-3.5" />
+            {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
+          </div>
+          {role !== "USER" && (
+            <Button variant="outline" size="sm" onClick={() => setSelectedCourtId("")}>Change Venue</Button>
+          )}
+        </div>
+      </div>
       <UniversalBookingTable
-        role={role} heading={heading} bookings={bookings} loading={loading}
+        role={role} bookings={bookings} loading={loading}
         onView={(b) => router.push(`/checkout/success?bookingId=${b.id}`)}
         onPay={role === "USER" ? (b) => router.push(`/checkout?bookingId=${b.id}`) : undefined}
         onCancel={role === "ADMIN" ? undefined : (b) => cancelMutation.mutate(b.id)}
@@ -131,5 +167,6 @@ export function RoleBookingsView({ role }: RoleBookingsViewProps) {
         onReject={role === "ORGANIZER" ? (b) => rejectMutation.mutate(b.id) : undefined}
       />
     </div>
+    </DashboardErrorBoundary>
   );
 }

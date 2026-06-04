@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DashboardStatCard } from "@/components/features/dashboard/shared/DashboardStatCard";
+import { DashboardErrorBoundary } from "@/components/features/dashboard/shared/DashboardErrorBoundary";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
@@ -118,6 +119,7 @@ export function UniversalBookingTable({ role, bookings, loading, onView, onPay, 
   const rowEnd = Math.min((table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize, filteredBookings.length);
 
   return (
+    <DashboardErrorBoundary fallbackTitle="Bookings Error" fallbackMessage="Failed to load bookings data. Please try again.">
     <div className="space-y-6">
       <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">{heading}</h1>
 
@@ -171,5 +173,6 @@ export function UniversalBookingTable({ role, bookings, loading, onView, onPay, 
         </div>
       </div>
     </div>
+    </DashboardErrorBoundary>
   );
 }

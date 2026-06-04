@@ -16,6 +16,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { organizerService } from "@/service/organizer.service";
 import { userService } from "@/service/user.service";
+import { DashboardErrorBoundary } from "./DashboardErrorBoundary";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { getInitials } from "@/lib/placeholders";
 import type {
@@ -215,25 +217,30 @@ export function ProfileSettingsPage({
 
   if (userQuery.isLoading || (effectiveMode === "ORGANIZER" && organizerQuery.isLoading)) {
     return (
+    <DashboardErrorBoundary fallbackTitle="Profile Error" fallbackMessage="Failed to load profile data. Please try again.">
       <div className="flex items-center justify-center py-20">
         <LoadingSpinner label="Loading profile..." />
       </div>
+    </DashboardErrorBoundary>
     );
   }
 
   if (!userData) {
     return (
+    <DashboardErrorBoundary fallbackTitle="Profile Error" fallbackMessage="Failed to load profile data. Please try again.">
       <Card className="rounded-xl border border-border bg-card">
         <CardContent className="p-6 text-sm text-destructive">
           Failed to load profile. Please refresh and try again.
         </CardContent>
       </Card>
+    </DashboardErrorBoundary>
     );
   }
 
   const hasUnsavedChanges = profileDraft !== null || organizerDraft !== null;
 
   return (
+    <DashboardErrorBoundary fallbackTitle="Profile Error" fallbackMessage="Failed to load profile data. Please try again.">
     <div className="space-y-6">
       {/* Header with save toolbar */}
       <motion.div
@@ -372,13 +379,12 @@ export function ProfileSettingsPage({
                   </div>
                   <div className="space-y-1.5 md:col-span-2">
                     <Label htmlFor="settings-bio" className="text-xs font-medium text-foreground/80">Bio</Label>
-                    <textarea
+                    <Textarea
                       id="settings-bio"
                       value={organizerForm.bio}
                       onChange={(e) => handleOrganizerFieldChange("bio", e.target.value)}
                       rows={4}
                       placeholder="Tell customers about your venues..."
-                      className="w-full rounded-lg border border-border bg-surface/50 px-3 py-2 text-sm text-foreground placeholder:text-text-tertiary outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none"
                     />
                   </div>
                 </div>
@@ -463,5 +469,6 @@ export function ProfileSettingsPage({
         </div>
       </div>
     </div>
+    </DashboardErrorBoundary>
   );
 }

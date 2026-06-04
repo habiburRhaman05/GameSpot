@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { courtService } from "@/service/court.service";
 import type { CourtStatus, UpdateCourtPayload } from "@/types/court.types";
@@ -97,16 +99,15 @@ export default function VenueDetailsEditorPage({ role, slug }: { role: "ORGANIZE
             <div className="space-y-1.5"><Label>Base Price (USD)</Label><Input type="number" step="0.01" value={formValues.basePrice} onChange={(e) => setDraft((p) => ({ ...p, basePrice: e.target.value }))} readOnly={isReadOnly} className={isReadOnly ? "bg-surface-2/50 cursor-not-allowed" : ""} /></div>
           </div>
           <div className="space-y-1.5"><Label>Description</Label>
-            <textarea value={formValues.description} onChange={(e) => setDraft((p) => ({ ...p, description: e.target.value }))} readOnly={isReadOnly} rows={5}
-              className={`w-full rounded-lg border border-border bg-surface/50 px-3 py-2 text-sm text-foreground placeholder:text-text-tertiary outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none ${isReadOnly ? "cursor-not-allowed" : ""}`} />
+            <Textarea value={formValues.description} onChange={(e) => setDraft((p) => ({ ...p, description: e.target.value }))} readOnly={isReadOnly} rows={5} placeholder="Venue description..." />
           </div>
           <div className="md:max-w-xs space-y-1.5"><Label>Status</Label>
             {isReadOnly ? (
               <Input value={formValues.status} readOnly className="bg-surface-2/50 cursor-not-allowed" />
             ) : (
-              <select value={formValues.status} onChange={(e) => setDraft((p) => ({ ...p, status: e.target.value as CourtStatus }))} className="h-10 w-full rounded-lg border border-input bg-background px-3 text-sm">
+              <Select value={formValues.status} onChange={(e) => setDraft((p) => ({ ...p, status: e.target.value as CourtStatus }))} disabled={isReadOnly}>
                 {STATUS_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-              </select>
+              </Select>
             )}
           </div>
         </CardContent>

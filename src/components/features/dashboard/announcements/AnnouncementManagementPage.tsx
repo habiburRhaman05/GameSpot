@@ -14,6 +14,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { queryKeys } from "@/lib/query/query-keys";
 import { announcementService } from "@/service/announcement.service";
@@ -142,12 +144,12 @@ export default function AnnouncementManagementPage({ role }: { role: Role }) {
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div className="space-y-2 md:col-span-2"><Label>Title</Label><Input value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))} placeholder="Venue maintenance update" /></div>
                   <div className="space-y-2 md:col-span-2"><Label>Content</Label>
-                    <textarea value={form.content} onChange={(e) => setForm((p) => ({ ...p, content: e.target.value }))} rows={4} placeholder="Write the announcement details..." className="w-full rounded-lg border border-border bg-surface/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none" />
+                    <Textarea value={form.content} onChange={(e) => setForm((p) => ({ ...p, content: e.target.value }))} rows={4} placeholder="Write the announcement details..." />
                   </div>
                   <div className="space-y-2"><Label>Type</Label>
-                    <select value={form.type} onChange={(e) => setForm((p) => ({ ...p, type: e.target.value as AnnouncementType }))} className="h-10 w-full rounded-lg border border-input bg-background px-3 text-sm">
+                    <Select value={form.type} onChange={(e) => setForm((p) => ({ ...p, type: e.target.value as AnnouncementType }))}>
                       <option value="INFO">Info</option><option value="MAINTENANCE">Maintenance</option><option value="PROMOTION">Promotion</option>
-                    </select>
+                    </Select>
                   </div>
                   <div className="space-y-2"><Label>Image URL</Label><Input value={form.imageUrl} onChange={(e) => setForm((p) => ({ ...p, imageUrl: e.target.value }))} placeholder="https://example.com/banner.jpg" /></div>
                   <div className="flex items-center gap-2">
@@ -167,9 +169,9 @@ export default function AnnouncementManagementPage({ role }: { role: Role }) {
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search announcements..." className="h-9 max-w-sm" />
             {role === "ORGANIZER" && organizerCourts.length > 0 && (
-              <select value={activeCourtId} onChange={(e) => setSelectedCourtId(e.target.value)} className="h-9 rounded-lg border border-input bg-background px-3 text-sm">
+              <Select value={activeCourtId} onChange={(e) => setSelectedCourtId(e.target.value)} variant="sm">
                 {organizerCourts.map((court) => <option key={court.id} value={court.id}>{court.name}</option>)}
-              </select>
+              </Select>
             )}
           </div>
         </CardHeader>

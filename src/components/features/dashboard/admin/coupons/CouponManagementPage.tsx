@@ -18,6 +18,7 @@ import { Separator } from "@/components/ui/separator";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
+import { Select } from "@/components/ui/select";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { couponService } from "@/service/coupon.service";
 import type { CreateCouponPayload, Coupon, CouponDiscountType, UpdateCouponPayload } from "@/types/coupon.types";
@@ -200,9 +201,9 @@ export default function CouponManagementPage() {
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div className="space-y-2"><Label>Coupon Code</Label><Input value={form.code} onChange={(e) => setForm((p) => ({ ...p, code: e.target.value }))} placeholder="WELCOME10" /></div>
                   <div className="space-y-2"><Label>Discount Type</Label>
-                    <select value={form.discountType} onChange={(e) => setForm((p) => ({ ...p, discountType: e.target.value as CouponDiscountType }))} className="h-10 w-full rounded-lg border border-input bg-background px-3 text-sm">
+                    <Select value={form.discountType} onChange={(e) => setForm((p) => ({ ...p, discountType: e.target.value as CouponDiscountType }))}>
                       <option value="PERCENTAGE">PERCENTAGE</option><option value="FIXED">FIXED</option>
-                    </select>
+                    </Select>
                   </div>
                   <div className="space-y-2"><Label>Discount Value</Label><Input type="number" min={0} step="0.01" value={form.discountValue} onChange={(e) => setForm((p) => ({ ...p, discountValue: e.target.value }))} placeholder={form.discountType === "PERCENTAGE" ? "10" : "50"} /></div>
                   <div className="space-y-2"><Label>Min Booking Amount</Label><Input type="number" min={0} step="0.01" value={form.minBookingAmount} onChange={(e) => setForm((p) => ({ ...p, minBookingAmount: e.target.value }))} placeholder="Optional" /></div>
